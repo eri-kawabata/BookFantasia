@@ -106,7 +106,7 @@ button:hover {
 }
 
 .book-card img {
-    width: 100%;
+    width: 60%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 1em;
@@ -137,4 +137,8 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
     background: var(--progress-glow);
     transition: width 0.3s ease;
+}
+
+footer p{
+    text-align: center;
 }
