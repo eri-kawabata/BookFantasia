@@ -1,0 +1,140 @@
+/* 基本テーマとファンタジーデザイン */
+:root {
+    --background-gradient: linear-gradient(to right, #4b79a1, #283e51);
+    --card-color: rgba(255, 255, 255, 0.1);
+    --text-color: #ffffff;
+    --header-glow: #ffdd59;
+    --button-bg: linear-gradient(45deg, #ff6f91, #ff9671);
+    --button-hover: linear-gradient(45deg, #ff9671, #ff6f91);
+    --badge-color: #ffe227;
+    --progress-glow: #ffa600;
+    --font-primary: 'Playfair Display', serif;
+    --font-secondary: 'Poppins', sans-serif;
+}
+
+/* ダークテーマ */
+.theme-dark {
+    --background-gradient: linear-gradient(to right, #1f1c2c, #928dab);
+    --card-color: rgba(0, 0, 0, 0.5);
+    --text-color: #d4d4dc;
+    --header-glow: #9a8c98;
+    --button-bg: linear-gradient(45deg, #6a0572, #a4508b);
+    --button-hover: linear-gradient(45deg, #a4508b, #6a0572);
+    --badge-color: #ffbb00;
+    --progress-glow: #ffaa00;
+}
+
+/* 全体のスタイル */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-secondary);
+    background: var(--background-gradient);
+    color: var(--text-color);
+}
+
+header {
+    text-align: center;
+    padding: 2em;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    color: var(--text-color);
+    text-shadow: 0 0 10px var(--header-glow), 0 0 20px var(--header-glow);
+}
+
+header h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-family: var(--font-primary);
+}
+
+header p {
+    font-size: 1.5rem;
+}
+
+/* セクション */
+section {
+    margin: 2em auto;
+    max-width: 800px;
+    padding: 1.5em;
+    border-radius: 15px;
+    background: var(--card-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+section h2 {
+    margin-bottom: 1em;
+    font-size: 1.8rem;
+    font-family: var(--font-primary);
+}
+
+/* ボタン */
+button {
+    padding: 0.8em 1.5em;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    color: #fff;
+    background: var(--button-bg);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--button-hover);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px var(--header-glow);
+}
+
+/* 本棚カード */
+#book-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1em;
+}
+
+.book-card {
+    background: var(--card-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1em;
+    text-align: center;
+    color: var(--text-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1em;
+}
+
+.book-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px var(--header-glow);
+}
+
+.book-card h3 {
+    margin: 0.5em 0;
+    font-size: 1.2rem;
+}
+
+/* プログレスバー */
+progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+    background: #444;
+}
+
+progress::-webkit-progress-value {
+    background: var(--progress-glow);
+    transition: width 0.3s ease;
+}
