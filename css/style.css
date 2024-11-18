@@ -142,3 +142,36 @@ progress::-webkit-progress-value {
 footer p{
     text-align: center;
 }
+
+/* レスポンシブデザイン */
+#book-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1em;
+    padding: 1em;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    #book-cards {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    section {
+        padding: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    #book-cards {
+        grid-template-columns: 1fr;
+    }
+
+    button {
+        font-size: 0.8rem;
+        padding: 0.6em;
+    }
+}
