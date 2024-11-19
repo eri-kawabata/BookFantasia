@@ -5,33 +5,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookFantasia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cinzel:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
     <header>
-        <h1>BookFantasia</h1>
-        <p>キャッチコピー？</p>
+        <h1>✨ BookFantasia ✨</h1>
+        <p>魔法の図書館を旅しよう！</p>
     </header>
+
 <main>
+    <!-- 本を追加 -->
     <section class="add-book">
-        <h2>本を追加</h2>
+        <h2>📖 本を追加</h2>
         <input type="text" id="book-title" placeholder="本のタイトルを入力">
+
+        <div class="tag-selector">
+            <select id="tag-dropdown">
+                <option value="" disabled selected>タグを選択</option>
+                <option value="魔法">魔法</option>
+                <option value="冒険">冒険</option>
+                <option value="ドラマ">ドラマ</option>
+                <option value="add-new">+ 新しいタグを追加</option>
+            </select>
+            <input type="text" id="new-tag-input" placeholder="新しいタグを入力" style="display: none;">
+            <button id="add-tag-btn" style="display: none;">追加</button>
+        </div>
+
+        <div id="selected-tags">
+            <p>選択されたタグ: <span id="tags-list"></span></p>
+        </div>
+
         <input type="file" id="book-cover" accept="image/*">
-        <button id="add-book-btn">📖 追加する</button>
+        <button id="add-book-btn" class="magic-btn">✨ 本を追加 ✨</button>
     </section>
+
+    <!-- 検索とタグ絞り込み -->
+    <section class="search-and-filter">
+        <h2>🔍 本を探す & タグで絞り込む</h2>
+        <input type="text" id="search-input" placeholder="タイトルやタグを入力">
+        <select id="tag-filter">
+            <option value="">すべてのタグ</option>
+        </select>
+    </section>
+
+    <!-- 本棚 -->
     <section class="book-list">
-        <h2>本棚</h2>
+        <h2>📚 本棚</h2>
         <div id="book-cards"></div>
     </section>
-    <section class="theme-selector">
-        <h2>テーマを選択</h2>
-        <button id="theme-light">☀️ ライトテーマ</button>
-        <button id="theme-dark">🌙 ダークテーマ</button>
-    </section>
 </main>
+
+    <!-- テーマ切り替え -->
+    <div id="theme-toggle" class="theme-toggle">
+        🌙
+    </div>
+
     <footer>
-        <p>© 2024 EriKawabata_BookFantasia</p>
+        <p>© 2024 BookFantasia | 魔法の図書館へようこそ</p>
     </footer>
     <script src="./js/script.js"></script>
 </body>

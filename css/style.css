@@ -1,55 +1,81 @@
-/* 基本テーマとファンタジーデザイン */
-:root {
-    --background-gradient: linear-gradient(to right, #4b79a1, #283e51);
-    --card-color: rgba(255, 255, 255, 0.1);
-    --text-color: #ffffff;
-    --header-glow: #ffdd59;
-    --button-bg: linear-gradient(45deg, #ff6f91, #ff9671);
-    --button-hover: linear-gradient(45deg, #ff9671, #ff6f91);
-    --badge-color: #ffe227;
-    --progress-glow: #ffa600;
-    --font-primary: 'Playfair Display', serif;
-    --font-secondary: 'Poppins', sans-serif;
-}
-
-/* ダークテーマ */
-.theme-dark {
-    --background-gradient: linear-gradient(to right, #1f1c2c, #928dab);
-    --card-color: rgba(0, 0, 0, 0.5);
-    --text-color: #d4d4dc;
-    --header-glow: #9a8c98;
-    --button-bg: linear-gradient(45deg, #6a0572, #a4508b);
-    --button-hover: linear-gradient(45deg, #a4508b, #6a0572);
-    --badge-color: #ffbb00;
-    --progress-glow: #ffaa00;
-}
-
-/* 全体のスタイル */
+/* 全体 */
 body {
+    font-family: 'Cinzel', serif;
     margin: 0;
     padding: 0;
-    font-family: var(--font-secondary);
-    background: var(--background-gradient);
-    color: var(--text-color);
+    background: linear-gradient(to bottom, #150a40, #31087b);
+    color: #ffffff;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.5s ease;
 }
 
+/* 星空アニメーション */
+body:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    animation: twinkle 10s infinite alternate;
+    z-index: -1;
+}
+
+@keyframes twinkle {
+    from {
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 0.9;
+    }
+}
+
+/* ヘッダー */
 header {
     text-align: center;
-    padding: 2em;
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    color: var(--text-color);
-    text-shadow: 0 0 10px var(--header-glow), 0 0 20px var(--header-glow);
+    padding: 3em;
+    background: rgba(0, 0, 0, 0.6);
+    color: #f5d020;
+    text-shadow: 0 0 20px #f5d020, 0 0 40px #f5d020;
+    font-family: 'Uncial Antiqua', serif;
 }
 
 header h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin: 0;
-    font-family: var(--font-primary);
 }
 
 header p {
+    margin-top: 1em;
     font-size: 1.5rem;
+}
+
+/* タグ選択部分 */
+.tag-selector {
+    margin-bottom: 1em;
+}
+
+#tag-dropdown,
+#new-tag-input {
+    width: 100%;
+    margin-bottom: 0.5em;
+    padding: 0.8em;
+    font-size: 1rem;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+}
+
+#selected-tags {
+    margin: 1em 0;
+}
+
+#tags-list {
+    color: #f5d020;
+    font-weight: bold;
 }
 
 /* セクション */
@@ -57,121 +83,131 @@ section {
     margin: 2em auto;
     max-width: 800px;
     padding: 1.5em;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
-    background: var(--card-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+    text-align: center;
 }
 
 section h2 {
     margin-bottom: 1em;
     font-size: 1.8rem;
-    font-family: var(--font-primary);
+    color: #ffffff;
+}
+
+/* 検索とフィルタ */
+#search-input,
+#tag-filter {
+    width: calc(100% - 2em);
+    margin: 0.5em auto;
+    padding: 0.8em;
+    font-size: 1rem;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    transition: box-shadow 0.3s ease;
+}
+
+#search-input:focus,
+#tag-filter:focus {
+    box-shadow: 0 0 10px #f5d020;
+    outline: none;
 }
 
 /* ボタン */
 button {
-    padding: 0.8em 1.5em;
+    display: inline-block;
+    padding: 0.8em 2em;
+    font-size: 1.2rem;
+    color: white;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #d53369, #daae51);
     border: none;
     border-radius: 30px;
-    font-size: 1rem;
-    color: #fff;
-    background: var(--button-bg);
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: glow 2s infinite alternate;
 }
 
 button:hover {
-    background: var(--button-hover);
     transform: scale(1.1);
-    box-shadow: 0 8px 20px var(--header-glow);
+    box-shadow: 0 8px 30px rgba(255, 235, 59, 0.6);
 }
 
-/* 本棚カード */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px #f5d020;
+    }
+
+    to {
+        box-shadow: 0 0 20px #f5d020, 0 0 40px #f5d020;
+    }
+}
+
+/* 本棚 */
 #book-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 1em;
+    justify-content: center;
+    padding: 1em;
 }
 
 .book-card {
-    background: var(--card-color);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex: 1 1 calc(25% - 1em);
+    max-width: 300px;
+    min-width: 200px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #f5d020;
     border-radius: 15px;
-    padding: 1em;
+    padding: 1.5em;
     text-align: center;
-    color: var(--text-color);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.book-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(255, 235, 59, 0.6);
+}
+
 .book-card img {
-    width: 60%;
+    width: 100%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 1em;
 }
 
-.book-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px var(--header-glow);
-}
-
 .book-card h3 {
+    font-size: 1.5rem;
+    color: #fff;
     margin: 0.5em 0;
-    font-size: 1.2rem;
 }
 
-/* プログレスバー */
-progress {
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    overflow: hidden;
+.book-card p {
+    font-size: 1rem;
+    color: #f5d020;
 }
 
-progress::-webkit-progress-bar {
-    background: #444;
+/* テーマトグル */
+.theme-toggle {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    font-size: 2rem;
+    color: #f5d020;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 0.5em;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, background 0.3s ease;
 }
 
-progress::-webkit-progress-value {
-    background: var(--progress-glow);
-    transition: width 0.3s ease;
-}
-
-footer p{
-    text-align: center;
-}
-
-/* レスポンシブデザイン */
-#book-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1em;
-    padding: 1em;
-}
-
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2rem;
-    }
-
-    #book-cards {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-
-    section {
-        padding: 1em;
-    }
-}
-
-@media (max-width: 480px) {
-    #book-cards {
-        grid-template-columns: 1fr;
-    }
-
-    button {
-        font-size: 0.8rem;
-        padding: 0.6em;
-    }
+.theme-toggle:hover {
+    transform: scale(1.2);
+    background: #f5d020;
+    color: #000000;
 }
