@@ -155,6 +155,44 @@ button:hover {
     padding: 1em;
 }
 
+/* 本棚カードのアニメーション */
+.book-card {
+    transform: translateY(0);
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* テーマ切り替えトランジション */
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* ボタンのホバーエフェクト改善 */
+button:hover {
+    transform: scale(1.1) rotate(1deg);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.6);
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+}
+
+/* 入力フィールドのフォーカス効果 */
+input:focus {
+    outline: none;
+    border-color: #f5d020;
+    box-shadow: 0 0 10px #f5d020;
+}
+
 .book-card {
     flex: 1 1 calc(25% - 1em);
     max-width: 300px;
@@ -210,4 +248,25 @@ button:hover {
     transform: scale(1.2);
     background: #f5d020;
     color: #000000;
+}
+
+@media (max-width: 768px) {
+    #book-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book-card {
+        width: 90%;
+    }
+}
+
+.theme-dark {
+    background: linear-gradient(to bottom, #000000, #1a1a1a);
+    color: #e0e0e0;
+}
+
+.theme-dark .book-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px solid #ffa500;
 }

@@ -15,7 +15,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [];
 let tags = new Set(['魔法', '冒険', 'ドラマ']); // 初期タグ
 let selectedTags = [];
 
-// 初期化
+// 初期化処理
 document.addEventListener('DOMContentLoaded', () => {
     try {
         books.forEach(book => addBookCard(book)); // 本棚に初期データを表示
@@ -33,17 +33,13 @@ tagDropdown.addEventListener('change', (event) => {
         const selectedValue = event.target.value;
 
         if (selectedValue === 'add-new') {
-            // 新しいタグを入力するUIを表示
             newTagInput.style.display = 'block';
             addTagBtn.style.display = 'inline-block';
         } else if (selectedValue && !selectedTags.includes(selectedValue)) {
-            // 選択されたタグをリストに追加
             selectedTags.push(selectedValue);
             updateSelectedTags();
         }
-
-        // ドロップダウンを初期状態に戻す
-        tagDropdown.value = '';
+        tagDropdown.value = ''; // ドロップダウンを初期状態に戻す
     } catch (error) {
         console.error('タグ選択処理でエラー:', error);
     }
@@ -56,19 +52,14 @@ addTagBtn.addEventListener('click', () => {
 
         if (newTag && !tags.has(newTag)) {
             tags.add(newTag);
-
-            // 新しいタグをドロップダウンに追加
             const option = document.createElement('option');
             option.value = newTag;
             option.textContent = newTag;
             tagDropdown.appendChild(option);
-
-            // 新しいタグを選択状態に追加
             selectedTags.push(newTag);
             updateSelectedTags();
         }
 
-        // 入力欄をリセット
         newTagInput.value = '';
         newTagInput.style.display = 'none';
         addTagBtn.style.display = 'none';
@@ -80,7 +71,7 @@ addTagBtn.addEventListener('click', () => {
 // 選択されたタグを更新
 function updateSelectedTags() {
     try {
-        selectedTagsContainer.textContent = selectedTags.join(', ');
+        selectedTagsContainer.textContent = selectedTags.join(', ') || 'なし';
     } catch (error) {
         console.error('選択されたタグの更新中にエラー:', error);
     }
@@ -92,13 +83,8 @@ addBookBtn.addEventListener('click', () => {
         const title = bookTitleInput.value.trim();
         const coverFile = bookCoverInput.files[0];
 
-        if (!title || !coverFile) {
-            alert('タイトルと画像を入力してください！');
-            return;
-        }
-
-        if (selectedTags.length === 0) {
-            alert('少なくとも1つのタグを選択してください！');
+        if (!title || !coverFile || selectedTags.length === 0) {
+            alert('すべてのフィールドを入力してください。');
             return;
         }
 
@@ -114,11 +100,7 @@ addBookBtn.addEventListener('click', () => {
             saveBooks();
             addBookCard(book);
 
-            // 入力をリセット
-            bookTitleInput.value = '';
-            bookCoverInput.value = '';
-            selectedTags = [];
-            updateSelectedTags();
+            resetForm();
         };
         reader.readAsDataURL(coverFile);
     } catch (error) {
@@ -139,6 +121,31 @@ function addBookCard(book) {
         bookCards.appendChild(card);
     } catch (error) {
         console.error('本棚にカードを追加中にエラー:', error);
+    }
+}
+
+// 検索入力またはタグフィルタ変更イベント
+searchInput.addEventListener('input', filterBooks);
+tagFilter.addEventListener('change', filterBooks);
+
+// 本をフィルタリングして表示
+function filterBooks() {
+    try {
+        const searchQuery = searchInput.value.toLowerCase().trim();
+        const selectedTag = tagFilter.value;
+
+        // フィルタリングされた本のリストを生成
+        const filteredBooks = books.filter(book => {
+            const matchesSearch = book.title.toLowerCase().includes(searchQuery);
+            const matchesTag = selectedTag === '' || book.tags.includes(selectedTag);
+            return matchesSearch && matchesTag;
+        });
+
+        // 本棚の表示を更新
+        bookCards.innerHTML = ''; // 既存のカードをクリア
+        filteredBooks.forEach(book => addBookCard(book));
+    } catch (error) {
+        console.error('フィルタリング中にエラー:', error);
     }
 }
 
@@ -177,6 +184,14 @@ function saveBooks() {
     } catch (error) {
         console.error('本の保存中にエラー:', error);
     }
+}
+
+// フォームリセット
+function resetForm() {
+    bookTitleInput.value = '';
+    bookCoverInput.value = '';
+    selectedTags = [];
+    updateSelectedTags();
 }
 
 // テーマ切り替え
