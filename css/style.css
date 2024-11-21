@@ -122,6 +122,30 @@ body {
     font-size: 0.9rem;
 }
 
+/* タロットカード風アニメーション */
+@keyframes tarotShuffle {
+    0% {
+        transform: rotate(0deg) translateY(0) scale(1);
+        opacity: 0;
+    }
+
+    50% {
+        transform: rotate(10deg) translateY(-20px) scale(1.1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: rotate(0deg) translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.book-card.tarot-animation {
+    animation: tarotShuffle 0.8s ease-in-out;
+    animation-fill-mode: both;
+    opacity: 0;
+}
+
 /* フッター */
 .footer {
     text-align: center;

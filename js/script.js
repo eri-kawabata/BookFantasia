@@ -116,6 +116,41 @@ function updateTagFilter() {
     }
 }
 
+// タグフィルタ処理（タロットカード風アニメーション追加）
+tagFilter.addEventListener('change', () => {
+    try {
+        const selectedTag = tagFilter.value;
+
+        if (selectedTag === '') {
+            renderBooksWithAnimation(books); // すべて表示
+        } else {
+            const filteredBooks = books.filter(book => book.tags.includes(selectedTag));
+            renderBooksWithAnimation(filteredBooks); // 選択されたタグに一致する本を表示
+        }
+    } catch (error) {
+        console.error('タグフィルタ処理でエラー:', error);
+    }
+});
+
+// 本をアニメーション付きでレンダリング
+function renderBooksWithAnimation(filteredBooks) {
+    bookCards.innerHTML = ''; // 現在の表示をクリア
+
+    // タロットカード風の配置アニメーション
+    filteredBooks.forEach((book, index) => {
+        const card = document.createElement('div');
+        card.className = 'book-card tarot-animation';
+        card.style.animationDelay = `${index * 0.1}s`; // 順次アニメーションを遅らせる
+        card.innerHTML = `
+            <img src="${book.cover}" alt="${book.title}" class="book-cover">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-tags">${book.tags.join(', ')}</p>
+        `;
+        bookCards.appendChild(card);
+    });
+}
+
+
 // ドロップダウン更新
 function updateTagDropdown() {
     try {
@@ -171,3 +206,4 @@ function applySavedTheme() {
         console.error('保存されたテーマ適用中にエラー:', error);
     }
 }
+
