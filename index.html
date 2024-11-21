@@ -5,56 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookFantasia</title>
-    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cinzel:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Almendra&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-    <header>
-        <h1>✨ BookFantasia ✨</h1>
-        <p>魔法の図書館を旅しよう！</p>
+    <header class="header">
+        <h1>BookFantasia</h1>
     </header>
 
-    <main>
-        <section class="add-book">
-            <h2>📖 本を追加</h2>
+    <main class="container">
+        <!-- 本を追加・検索 -->
+        <section class="add-and-search">
+            <h2>本を追加 / 検索</h2>
+            <div class="form-group">
+                <!-- 本を探す -->
+                <input type="text" id="search-input" placeholder="タイトルで検索" class="input-text">
+                <select id="tag-filter" class="select-dropdown">
+                    <option value="">タグで検索</option>
+                </select>
+            </div>
             <form id="add-book-form">
-                <input type="text" id="book-title" placeholder="本のタイトルを入力" required>
+                <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required>
                 <div class="tag-selector">
-                    <select id="tag-dropdown">
+                    <select id="tag-dropdown" class="select-dropdown">
                         <option value="" disabled selected>タグを選択</option>
                         <option value="魔法">魔法</option>
                         <option value="冒険">冒険</option>
                         <option value="ドラマ">ドラマ</option>
                         <option value="add-new">+ 新しいタグを追加</option>
                     </select>
-                    <input type="text" id="new-tag-input" placeholder="新しいタグを入力" style="display: none;">
-                    <button type="button" id="add-tag-btn" style="display: none;">追加</button>
+                    <div id="new-tag-wrapper" style="display: none;">
+                        <input type="text" id="new-tag-input" class="input-text small-input" placeholder="新しいタグを入力">
+                        <button type="button" id="add-tag-btn" class="btn-small">追加</button>
+                    </div>
                 </div>
                 <div id="selected-tags">
-                    <p>選択されたタグ: <span id="tags-list"></span></p>
+                    <p>選択されたタグ: <span id="tags-list">なし</span></p>
                 </div>
-                <input type="file" id="book-cover" accept="image/*" required>
-                <button type="submit" id="add-book-btn" class="magic-btn">✨ 本を追加 ✨</button>
+                <input type="file" id="book-cover" accept="image/*" class="input-file" required>
+                <button type="submit" id="add-book-btn" class="btn-magic">本を追加</button>
             </form>
         </section>
-        <section class="search-and-filter">
-            <h2>🔍 本を探す & タグで絞り込む</h2>
-            <input type="text" id="search-input" placeholder="タイトルやタグを入力">
-            <select id="tag-filter">
-                <option value="">すべてのタグ</option>
-            </select>
-        </section>
+
+        <!-- 本棚 -->
         <section class="book-list">
             <h2>📚 本棚</h2>
-            <div id="book-cards"></div>
+            <div id="book-cards" class="book-cards"></div>
         </section>
     </main>
 
-    <div id="theme-toggle" class="theme-toggle" aria-label="テーマ切り替え">🌙</div>
-
-    <footer>
+    <footer class="footer">
         <p>© 2024 BookFantasia | 魔法の図書館へようこそ</p>
     </footer>
     <script src="./js/script.js"></script>

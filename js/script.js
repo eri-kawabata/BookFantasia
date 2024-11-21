@@ -1,89 +1,61 @@
-// DOM要素取得
 const bookCards = document.getElementById('book-cards');
 const addBookBtn = document.getElementById('add-book-btn');
 const bookTitleInput = document.getElementById('book-title');
 const bookCoverInput = document.getElementById('book-cover');
 const tagDropdown = document.getElementById('tag-dropdown');
-const newTagInput = document.getElementById('new-tag-input');
-const addTagBtn = document.getElementById('add-tag-btn');
 const selectedTagsContainer = document.getElementById('tags-list');
 const searchInput = document.getElementById('search-input');
 const tagFilter = document.getElementById('tag-filter');
 const themeToggle = document.getElementById('theme-toggle');
 
 let books = JSON.parse(localStorage.getItem('books')) || [];
-let tags = new Set(['魔法', '冒険', 'ドラマ']); // 初期タグ
+const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
 let selectedTags = [];
 
 // 初期化処理
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => initializeApp());
+
+function initializeApp() {
     try {
-        books.forEach(book => addBookCard(book)); // 本棚に初期データを表示
-        updateTagDropdown(); // タグドロップダウンを更新
-        updateTagFilter(); // 検索用タグフィルタを更新
-        applySavedTheme(); // 保存されたテーマを適用
+        // 本棚の初期データを表示
+        books.forEach(addBookCard);
+
+        // タグの初期設定
+        updateTagDropdown();
+        updateTagFilter();
+
+        // テーマの適用
+        applySavedTheme();
     } catch (error) {
         console.error('初期化中にエラーが発生しました:', error);
     }
-});
-
-// タグ選択処理
-tagDropdown.addEventListener('change', (event) => {
-    try {
-        const selectedValue = event.target.value;
-
-        if (selectedValue === 'add-new') {
-            newTagInput.style.display = 'block';
-            addTagBtn.style.display = 'inline-block';
-        } else if (selectedValue && !selectedTags.includes(selectedValue)) {
-            selectedTags.push(selectedValue);
-            updateSelectedTags();
-        }
-        tagDropdown.value = ''; // ドロップダウンを初期状態に戻す
-    } catch (error) {
-        console.error('タグ選択処理でエラー:', error);
-    }
-});
-
-// 新しいタグを追加
-addTagBtn.addEventListener('click', () => {
-    try {
-        const newTag = newTagInput.value.trim();
-
-        if (newTag && !tags.has(newTag)) {
-            tags.add(newTag);
-            const option = document.createElement('option');
-            option.value = newTag;
-            option.textContent = newTag;
-            tagDropdown.appendChild(option);
-            selectedTags.push(newTag);
-            updateSelectedTags();
-        }
-
-        newTagInput.value = '';
-        newTagInput.style.display = 'none';
-        addTagBtn.style.display = 'none';
-    } catch (error) {
-        console.error('新しいタグの追加中にエラー:', error);
-    }
-});
-
-// 選択されたタグを更新
-function updateSelectedTags() {
-    try {
-        selectedTagsContainer.textContent = selectedTags.join(', ') || 'なし';
-    } catch (error) {
-        console.error('選択されたタグの更新中にエラー:', error);
-    }
 }
 
+// タグ選択処理（追加）
+tagFilter.addEventListener('change', () => {
+    try {
+        const selectedTag = tagFilter.value;
+
+        if (selectedTag === '') {
+            renderBooks(books); // すべて表示
+        } else {
+            const filteredBooks = books.filter(book => book.tags.includes(selectedTag));
+            renderBooks(filteredBooks); // 選択されたタグに一致する本を表示
+        }
+    } catch (error) {
+        console.error('タグフィルタ処理でエラー:', error);
+    }
+});
+
 // 本を追加
-addBookBtn.addEventListener('click', () => {
+addBookBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // フォーム送信を防ぐ
     try {
         const title = bookTitleInput.value.trim();
         const coverFile = bookCoverInput.files[0];
+        const selectedTag = tagDropdown.value;
 
-        if (!title || !coverFile || selectedTags.length === 0) {
+        if (!title || !coverFile || !selectedTag) {
             alert('すべてのフィールドを入力してください。');
             return;
         }
@@ -92,15 +64,14 @@ addBookBtn.addEventListener('click', () => {
         reader.onload = () => {
             const book = {
                 title,
-                tags: [...selectedTags],
+                tags: [selectedTag], // 選択されたタグのみ
                 cover: reader.result,
             };
 
             books.push(book);
             saveBooks();
             addBookCard(book);
-
-            resetForm();
+            resetForm(); // フォームをリセット
         };
         reader.readAsDataURL(coverFile);
     } catch (error) {
@@ -114,9 +85,9 @@ function addBookCard(book) {
         const card = document.createElement('div');
         card.className = 'book-card';
         card.innerHTML = `
-            <img src="${book.cover}" alt="${book.title}" style="width: 100%; height: auto; border-radius: 5px;">
-            <h3>${book.title}</h3>
-            <p>${book.tags.join(', ')}</p>
+            <img src="${book.cover}" alt="${book.title}" class="book-cover">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-tags">${book.tags.join(', ')}</p>
         `;
         bookCards.appendChild(card);
     } catch (error) {
@@ -124,35 +95,16 @@ function addBookCard(book) {
     }
 }
 
-// 検索入力またはタグフィルタ変更イベント
-searchInput.addEventListener('input', filterBooks);
-tagFilter.addEventListener('change', filterBooks);
-
-// 本をフィルタリングして表示
-function filterBooks() {
-    try {
-        const searchQuery = searchInput.value.toLowerCase().trim();
-        const selectedTag = tagFilter.value;
-
-        // フィルタリングされた本のリストを生成
-        const filteredBooks = books.filter(book => {
-            const matchesSearch = book.title.toLowerCase().includes(searchQuery);
-            const matchesTag = selectedTag === '' || book.tags.includes(selectedTag);
-            return matchesSearch && matchesTag;
-        });
-
-        // 本棚の表示を更新
-        bookCards.innerHTML = ''; // 既存のカードをクリア
-        filteredBooks.forEach(book => addBookCard(book));
-    } catch (error) {
-        console.error('フィルタリング中にエラー:', error);
-    }
+// 本をレンダリング（再利用可能関数）
+function renderBooks(filteredBooks) {
+    bookCards.innerHTML = ''; // 現在の表示をクリア
+    filteredBooks.forEach(addBookCard); // 新しいデータを表示
 }
 
 // タグフィルタを更新
 function updateTagFilter() {
     try {
-        tagFilter.innerHTML = '<option value="">すべてのタグ</option>';
+        tagFilter.innerHTML = '<option value="">タグで検索</option>';
         tags.forEach(tag => {
             const option = document.createElement('option');
             option.value = tag;
@@ -169,8 +121,7 @@ function updateTagDropdown() {
     try {
         tagDropdown.innerHTML = `
             <option value="" disabled selected>タグを選択</option>
-            ${Array.from(tags).map(tag => `<option value="${tag}">${tag}</option>`).join('')}
-            <option value="add-new">+ 新しいタグを追加</option>
+            ${tags.map(tag => `<option value="${tag}">${tag}</option>`).join('')}
         `;
     } catch (error) {
         console.error('タグドロップダウンの更新中にエラー:', error);
@@ -190,6 +141,7 @@ function saveBooks() {
 function resetForm() {
     bookTitleInput.value = '';
     bookCoverInput.value = '';
+    tagDropdown.value = '';
     selectedTags = [];
     updateSelectedTags();
 }
