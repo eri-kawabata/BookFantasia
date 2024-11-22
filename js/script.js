@@ -1,4 +1,3 @@
-// DOM要素取得
 const bookCards = document.getElementById('book-cards');
 const addBookBtn = document.getElementById('add-book-btn');
 const bookTitleInput = document.getElementById('book-title');
@@ -12,6 +11,7 @@ const modalBookCover = document.getElementById('modal-book-cover');
 const modalBookTitle = document.getElementById('modal-book-title');
 const modalBookTags = document.getElementById('modal-book-tags');
 const closeModal = document.querySelector('.close-modal');
+const statusDropdown = document.getElementById('status-dropdown');
 
 // タグの定義
 const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
@@ -51,25 +51,68 @@ function saveTheme(theme) {
     localStorage.setItem('theme', theme);
 }
 
+// 本カード作成
+function createBookCard(book) {
+    const card = document.createElement('div');
+    card.className = `book-card status-${getStatusClass(book.status)}`;
+    card.innerHTML = `
+        <img src="${book.cover}" alt="${book.title}" class="book-cover">
+        <h3>${book.title}</h3>
+        <p>タグ: ${book.tags.join(', ')}</p>
+        <p>
+            <select onchange="updateBookStatus('${book.title}', this.value)">
+                <option value="未読" ${book.status === '未読' ? 'selected' : ''}>未読</option>
+                <option value="読書中" ${book.status === '読書中' ? 'selected' : ''}>読書中</option>
+                <option value="読了" ${book.status === '読了' ? 'selected' : ''}>読了</option>
+            </select>
+        </p>
+        <button class="btn-details">詳細を見る</button>
+    `;
+    card.querySelector('.btn-details').addEventListener('click', () => openModal(book));
+    return card;
+}
+
+// ステータスクラス名取得
+function getStatusClass(status) {
+    switch (status) {
+        case '未読': return 'unread';
+        case '読書中': return 'reading';
+        case '読了': return 'finished';
+        default: return 'unread';
+    }
+}
+
+// ステータス変更
+function updateBookStatus(title, newStatus) {
+    const book = books.find(b => b.title === title);
+    if (book) {
+        book.status = newStatus;
+        saveBooks();
+        renderBooksWithAnimation(books);
+    }
+}
+
 // 本を追加
 addBookBtn.addEventListener('click', (event) => {
     event.preventDefault();
     const title = bookTitleInput.value.trim();
     const coverFile = bookCoverInput.files[0];
     const selectedTag = tagDropdown.value;
+    const status = statusDropdown.value;
 
-    if (!title || !coverFile || !selectedTag) {
+    if (!title || !coverFile || !selectedTag || !status) {
         alert('すべてのフィールドを入力してください。');
-        return;
-    }
-    if (!validateImage(coverFile)) {
         return;
     }
 
     const reader = new FileReader();
     reader.onload = () => {
-        const book = { title, tags: [selectedTag], cover: reader.result };
-        books.push(book);
+        books.push({
+            title,
+            tags: [selectedTag],
+            status,
+            cover: reader.result,
+        });
         saveBooks();
         renderBooksWithAnimation(books);
         resetForm();
@@ -77,37 +120,17 @@ addBookBtn.addEventListener('click', (event) => {
     reader.readAsDataURL(coverFile);
 });
 
-function validateImage(coverFile) {
-    if (!coverFile.type.startsWith('image/')) {
-        alert('画像ファイルを選択してください。');
-        return false;
-    }
-    if (coverFile.size > 2 * 1024 * 1024) {
-        alert('画像ファイルは2MB以下である必要があります。');
-        return false;
-    }
-    return true;
-}
-
 // 本棚をレンダリング
 function renderBooksWithAnimation(filteredBooks) {
     bookCards.innerHTML = '';
     filteredBooks.forEach((book, index) => {
-        const card = document.createElement('div');
-        card.className = 'book-card tarot-animation';
+        const card = createBookCard(book);
         card.style.animationDelay = `${index * 0.1}s`;
-        card.innerHTML = `
-            <img src="${book.cover}" alt="${book.title}" class="book-cover">
-            <h3 class="book-title">${book.title}</h3>
-            <p class="book-tags">${book.tags.join(', ')}</p>
-            <button class="btn-details">詳細を見る</button>
-        `;
-        card.querySelector('.btn-details').addEventListener('click', () => openModal(book));
         bookCards.appendChild(card);
     });
 }
 
-// モーダル表示
+// モーダルを開く
 function openModal(book) {
     modalBookCover.src = book.cover;
     modalBookTitle.textContent = book.title;
@@ -115,7 +138,7 @@ function openModal(book) {
     modal.style.display = 'flex';
 }
 
-// モーダル閉じる
+// モーダルを閉じる
 closeModal.addEventListener('click', () => modal.style.display = 'none');
 modal.addEventListener('click', (event) => {
     if (event.target === modal) modal.style.display = 'none';
@@ -139,7 +162,8 @@ searchInput.addEventListener('input', renderFilteredBooks);
 function updateTagDropdown() {
     tagDropdown.innerHTML = `
         <option value="" disabled selected>タグを選択</option>
-        ${tags.map(tag => `<option value="${tag}">${tag}</option>`).join('')}`;
+        ${tags.map(tag => `<option value="${tag}">${tag}</option>`).join('')}
+    `;
 }
 
 function updateTagFilter() {
@@ -160,4 +184,6 @@ function resetForm() {
     bookTitleInput.value = '';
     bookCoverInput.value = '';
     tagDropdown.value = '';
+    statusDropdown.value = '';
 }
+

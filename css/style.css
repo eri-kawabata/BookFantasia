@@ -316,6 +316,29 @@ body.dark-mode .close-modal {
     color: #f00;
 }
 
+/* 各ステータスの色分け */
+.book-card.status-unread {
+    border-left: 5px solid #ff6347;
+    /* 赤 */
+}
+
+.book-card.status-reading {
+    border-left: 5px solid #ffa500;
+    /* オレンジ */
+}
+
+.book-card.status-finished {
+    border-left: 5px solid #32cd32;
+    /* 緑 */
+}
+
+/* ステータス表示部分 */
+.status-select {
+    margin-top: 1em;
+    font-size: 0.9rem;
+    color: #555;
+}
+
 /* 本棚カード */
 .book-cards {
     display: grid;
