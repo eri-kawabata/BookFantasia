@@ -14,10 +14,9 @@
         <h1>BookFantasia</h1>
     </header>
 
-<div class="theme-toggle-container">
-    <button id="theme-toggle" class="theme-toggle">🌙</button>
-</div>
-
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </div>
 
     <main class="container">
         <!-- 本を追加・検索 -->
@@ -32,22 +31,12 @@
             </div>
             <form id="add-book-form">
                 <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required>
-                <div class="tag-selector">
-                    <select id="tag-dropdown" class="select-dropdown">
-                        <option value="" disabled selected>タグを選択</option>
-                        <option value="魔法">魔法</option>
-                        <option value="冒険">冒険</option>
-                        <option value="ドラマ">ドラマ</option>
-                        <option value="add-new">+ 新しいタグを追加</option>
-                    </select>
-                    <div id="new-tag-wrapper" style="display: none;">
-                        <input type="text" id="new-tag-input" class="input-text small-input" placeholder="新しいタグを入力">
-                        <button type="button" id="add-tag-btn" class="btn-small">追加</button>
-                    </div>
-                </div>
-                <div id="selected-tags">
-                    <p>選択されたタグ: <span id="tags-list">なし</span></p>
-                </div>
+                <select id="tag-dropdown" class="select-dropdown">
+                    <option value="" disabled selected>タグを選択</option>
+                    <option value="魔法">魔法</option>
+                    <option value="冒険">冒険</option>
+                    <option value="ドラマ">ドラマ</option>
+                </select>
                 <input type="file" id="book-cover" accept="image/*" class="input-file" required>
                 <button type="submit" id="add-book-btn" class="btn-magic">本を追加</button>
             </form>
@@ -58,11 +47,22 @@
             <h2>本棚</h2>
             <div id="book-cards" class="book-cards"></div>
         </section>
+
+        <!-- モーダルウィンドウ -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <img id="modal-book-cover" src="" alt="Book Cover" class="modal-book-cover">
+                <h2 id="modal-book-title"></h2>
+                <p id="modal-book-tags"></p>
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
         <p>© 2024 BookFantasia | 魔法の図書館へようこそ</p>
     </footer>
+
     <script src="./js/script.js"></script>
 </body>
 

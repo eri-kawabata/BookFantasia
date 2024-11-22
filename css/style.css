@@ -33,25 +33,25 @@ body.dark-mode {
     box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
 
-/* ライトモードスタイル - グリフィンドール風 */
+/* ライトモード - グリフィンドール風改良 */
 body.light-mode {
-    background: linear-gradient(135deg, #8b0000, #ffd700);
-    /* グリフィンドールの赤と金 */
-    color: #3e2723;
+    background: linear-gradient(135deg, #7c0a02, #ffe9a9);
+    /* 落ち着いた赤と金 */
+    color: #472d1c;
     /* ダークブラウン */
 }
 
 .header.light-mode {
-    background: linear-gradient(135deg, #8b0000, #ff6347);
-    /* 赤のグラデーション */
+    background: linear-gradient(135deg, #8b0000, #f08080);
+    /* 赤のソフトグラデーション */
     color: #ffd700;
     /* ゴールド */
     border-bottom: 2px solid #b8860b;
-    /* ゴールド系のボーダー */
+    /* ゴールド系ボーダー */
 }
 
 .book-card.light-mode {
-    background: rgba(255, 223, 186, 0.9);
+    background: rgba(255, 233, 169, 0.9);
     /* 柔らかい金のニュアンス */
     border: 1px solid #d4af37;
     /* ゴールド系の境界線 */
@@ -60,9 +60,10 @@ body.light-mode {
 }
 
 .book-card.light-mode:hover {
-    transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
     /* ホバー時に影を強調 */
+    transform: scale(1.05);
+    /* 少し拡大 */
 }
 
 .btn-magic.light-mode {
@@ -71,7 +72,6 @@ body.light-mode {
     color: #fff;
     /* 白文字 */
     border: none;
-    transition: transform 0.2s ease, background 0.3s ease;
 }
 
 .btn-magic.light-mode:hover {
@@ -87,6 +87,13 @@ body.light-mode {
     /* ゴールド系の境界線 */
     color: #3e2723;
     /* ダークブラウン */
+}
+
+.input-text.light-mode:focus,
+.select-dropdown.light-mode:focus {
+    border: 2px solid #ffd700;
+    /* ゴールドでフォーカス強調 */
+    outline: none;
 }
 
 .footer.light-mode {
@@ -197,6 +204,116 @@ body.light-mode {
 .btn-magic:hover {
     transform: scale(1.05);
     background: linear-gradient(90deg, #ff5722, #ff8c00);
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    /* 背景を暗く強調 */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* モーダルコンテンツ - ダークモード対応 */
+.modal-content {
+    background: #29293d;
+    /* ダークモード背景色 */
+    border-radius: 10px;
+    padding: 2em;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: fadeInZoom 0.4s ease-in-out;
+    color: #f5f5f7;
+    /* ダークモード用文字色 */
+}
+
+/* ダークモード用モーダル */
+body.dark-mode .modal-content {
+    background: #29293d;
+    /* ダークモード用背景 */
+    color: #ffffff;
+    /* 白文字 */
+}
+/* ライトモード用モーダル */
+body.light-mode .modal-content {
+    background: #fffae5;
+    /* 柔らかいクリーム色 */
+    color: #3e2723;
+    /* ダークブラウン */
+    border: 2px solid #ffd700;
+    /* ゴールドの境界線 */
+}
+
+@keyframes fadeInZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* モーダルタイトル */
+.modal-content h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1em;
+    color: inherit;
+    /* 親要素の色を引き継ぐ */
+}
+
+/* モーダル内のタグ情報 */
+.modal-content p {
+    font-size: 1rem;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    color: inherit;
+    /* 親要素の色を引き継ぐ */
+}
+
+/* モーダル内の本のカバー画像 */
+.modal-book-cover {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+/* モーダル閉じるボタン */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #3e2723;
+    /* ダークブラウン */
+    transition: color 0.2s ease;
+}
+
+body.light-mode .close-modal {
+    color: #3e2723;
+    /* ライトモード用ダークブラウン */
+}
+
+body.dark-mode .close-modal {
+    color: #ffffff;
+    /* ダークモード時は白 */
+}
+
+.close-modal:hover {
+    color: #f00;
 }
 
 /* 本棚カード */
