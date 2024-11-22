@@ -1,10 +1,125 @@
-/* 全体 */
+/* 共通スタイル */
 body {
     font-family: 'Almendra', serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to bottom, #1e2a40, #0d1225);
-    color: #e0e0e0;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* ダークモードスタイル */
+body.dark-mode {
+    background: linear-gradient(135deg, #1c1c2b, #2d3545, #29293d);
+    color: #f5f5f7;
+}
+
+.header.dark-mode {
+    background: #29293d;
+    color: #e6e6fa;
+    border-bottom: 2px solid #606090;
+}
+
+.book-card.dark-mode {
+    background: rgba(70, 70, 110, 0.85);
+    border: 1px solid #a9a9f5;
+    box-shadow: 0 4px 15px rgba(169, 169, 245, 0.4);
+}
+
+.btn-magic.dark-mode {
+    background: linear-gradient(90deg, #414161, #606090);
+    color: #f5f5f7;
+}
+
+.book-card.dark-mode:hover {
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* ライトモードスタイル - グリフィンドール風 */
+body.light-mode {
+    background: linear-gradient(135deg, #8b0000, #ffd700);
+    /* グリフィンドールの赤と金 */
+    color: #3e2723;
+    /* ダークブラウン */
+}
+
+.header.light-mode {
+    background: linear-gradient(135deg, #8b0000, #ff6347);
+    /* 赤のグラデーション */
+    color: #ffd700;
+    /* ゴールド */
+    border-bottom: 2px solid #b8860b;
+    /* ゴールド系のボーダー */
+}
+
+.book-card.light-mode {
+    background: rgba(255, 223, 186, 0.9);
+    /* 柔らかい金のニュアンス */
+    border: 1px solid #d4af37;
+    /* ゴールド系の境界線 */
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+    /* ゴールド系の影 */
+}
+
+.book-card.light-mode:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+    /* ホバー時に影を強調 */
+}
+
+.btn-magic.light-mode {
+    background: linear-gradient(90deg, #ff4500, #ff8c00);
+    /* 赤からオレンジのグラデーション */
+    color: #fff;
+    /* 白文字 */
+    border: none;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-magic.light-mode:hover {
+    background: linear-gradient(90deg, #ff6347, #ffd700);
+    /* ホバー時の赤と金 */
+}
+
+.input-text.light-mode,
+.select-dropdown.light-mode {
+    background: rgba(255, 245, 230, 0.9);
+    /* 柔らかい金色 */
+    border: 1px solid #d4af37;
+    /* ゴールド系の境界線 */
+    color: #3e2723;
+    /* ダークブラウン */
+}
+
+.footer.light-mode {
+    background: linear-gradient(135deg, #8b0000, #ffd700);
+    /* グリフィンドールの色 */
+    color: #b8860b;
+    /* ゴールド系の文字 */
+    border-top: 2px solid #d4af37;
+    /* ゴールドの境界線 */
+}
+
+/* トグルボタンのスタイル */
+.theme-toggle-container {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+
+.theme-toggle {
+    font-size: 1.5rem;
+    padding: 0.5em;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: #333333;
+    color: #f5d020;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.2);
+    background: #f5d020;
+    color: #333333;
 }
 
 /* コンテナ */
@@ -125,13 +240,13 @@ body {
 /* タロットカード風アニメーション */
 @keyframes tarotShuffle {
     0% {
-        transform: rotate(0deg) translateY(0) scale(1);
+        transform: rotate(0deg) translateY(0) scale(0.8);
         opacity: 0;
     }
 
-    50% {
-        transform: rotate(10deg) translateY(-20px) scale(1.1);
-        opacity: 0.5;
+    60% {
+        transform: rotate(15deg) translateY(-15px) scale(1.1);
+        opacity: 0.7;
     }
 
     100% {

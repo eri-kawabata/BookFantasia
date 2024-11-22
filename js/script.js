@@ -6,58 +6,54 @@ const bookCoverInput = document.getElementById('book-cover');
 const tagDropdown = document.getElementById('tag-dropdown');
 const searchInput = document.getElementById('search-input');
 const tagFilter = document.getElementById('tag-filter');
+const themeToggle = document.getElementById('theme-toggle');
 
-let books = JSON.parse(localStorage.getItem('books')) || [];
+// タグの定義
 const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
 
-// 初期化処理
-document.addEventListener('DOMContentLoaded', () => initializeApp());
+// ローカルストレージから本データを取得
+let books = JSON.parse(localStorage.getItem('books')) || [];
 
+// 初期化処理
+document.addEventListener('DOMContentLoaded', () => {
+    initializeApp();
+    applySavedTheme();
+});
+
+// アプリの初期化
 function initializeApp() {
     try {
-        books.forEach(addBookCard); // 本棚の初期データを表示
-        updateTagDropdown();
-        updateTagFilter();
+        renderBooksWithAnimation(books); // 本棚の初期データを表示
+        updateTagDropdown(); // タグドロップダウンを更新
+        updateTagFilter(); // タグフィルタを更新
     } catch (error) {
         console.error('初期化中にエラーが発生しました:', error);
     }
 }
 
-// タグフィルタと検索の統合レンダリング処理
-function renderFilteredBooks() {
-    const selectedTag = tagFilter.value;
-    const searchQuery = searchInput.value.toLowerCase().trim();
+// テーマ切り替え
+themeToggle.addEventListener('click', () => {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    setTheme(isDarkMode ? 'light-mode' : 'dark-mode');
+});
 
-    const filteredBooks = books.filter(book => {
-        const matchesTag = selectedTag === '' || book.tags.includes(selectedTag);
-        const matchesSearch = searchQuery === '' || book.title.toLowerCase().includes(searchQuery);
-        return matchesTag && matchesSearch;
-    });
-
-    renderBooksWithAnimation(filteredBooks);
+// テーマの設定
+function setTheme(theme) {
+    document.body.classList.toggle('dark-mode', theme === 'dark-mode');
+    document.body.classList.toggle('light-mode', theme === 'light-mode');
+    themeToggle.textContent = theme === 'dark-mode' ? '☀️' : '🌙';
+    saveTheme(theme);
 }
 
-// タグフィルタ処理
-tagFilter.addEventListener('change', renderFilteredBooks);
+// 保存されたテーマを適用
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+    setTheme(savedTheme);
+}
 
-// タイトル検索処理
-searchInput.addEventListener('input', renderFilteredBooks);
-
-// タロットカードアニメーションでレンダリング
-function renderBooksWithAnimation(filteredBooks) {
-    bookCards.innerHTML = ''; // 現在の表示をクリア
-
-    filteredBooks.forEach((book, index) => {
-        const card = document.createElement('div');
-        card.className = 'book-card tarot-animation';
-        card.style.animationDelay = `${index * 0.1}s`; // 順次アニメーションを遅らせる
-        card.innerHTML = `
-            <img src="${book.cover}" alt="${book.title}" class="book-cover">
-            <h3 class="book-title">${book.title}</h3>
-            <p class="book-tags">${book.tags.join(', ')}</p>
-        `;
-        bookCards.appendChild(card);
-    });
+// 現在のテーマを保存
+function saveTheme(theme) {
+    localStorage.setItem('theme', theme);
 }
 
 // 本を追加
@@ -73,18 +69,28 @@ addBookBtn.addEventListener('click', (event) => {
             return;
         }
 
+        if (!coverFile.type.startsWith('image/')) {
+            alert('画像ファイルを選択してください。');
+            return;
+        }
+
+        if (coverFile.size > 2 * 1024 * 1024) { // 2MB制限
+            alert('画像ファイルは2MB以下である必要があります。');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = () => {
             const book = {
                 title,
-                tags: [selectedTag], // 選択されたタグのみ
+                tags: [selectedTag],
                 cover: reader.result,
             };
 
             books.push(book);
             saveBooks();
-            addBookCard(book);
-            resetForm(); // フォームをリセット
+            renderBooksWithAnimation(books);
+            resetForm();
         };
         reader.readAsDataURL(coverFile);
     } catch (error) {
@@ -92,8 +98,19 @@ addBookBtn.addEventListener('click', (event) => {
     }
 });
 
-// 本棚にカードを追加
-function addBookCard(book) {
+// 本棚をレンダリング（アニメーション付き）
+function renderBooksWithAnimation(filteredBooks) {
+    bookCards.innerHTML = ''; // 現在の表示をクリア
+    filteredBooks.forEach((book, index) => {
+        const card = createBookCard(book);
+        card.classList.add('tarot-animation');
+        card.style.animationDelay = `${index * 0.1}s`; // 順次アニメーション
+        bookCards.appendChild(card);
+    });
+}
+
+// 本のカードを作成
+function createBookCard(book) {
     const card = document.createElement('div');
     card.className = 'book-card';
     card.innerHTML = `
@@ -101,21 +118,28 @@ function addBookCard(book) {
         <h3 class="book-title">${book.title}</h3>
         <p class="book-tags">${book.tags.join(', ')}</p>
     `;
-    bookCards.appendChild(card);
+    return card;
 }
 
-// タグフィルタを更新
-function updateTagFilter() {
-    tagFilter.innerHTML = '<option value="">タグで検索</option>';
-    tags.forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        tagFilter.appendChild(option);
+// タグフィルタと検索の処理
+function renderFilteredBooks() {
+    const selectedTag = tagFilter.value;
+    const searchQuery = searchInput.value.toLowerCase().trim();
+
+    const filteredBooks = books.filter(book => {
+        const matchesTag = selectedTag === '' || book.tags.includes(selectedTag);
+        const matchesSearch = searchQuery === '' || book.title.toLowerCase().includes(searchQuery);
+        return matchesTag && matchesSearch;
     });
+
+    renderBooksWithAnimation(filteredBooks);
 }
 
-// ドロップダウン更新
+// タグフィルタの更新
+tagFilter.addEventListener('change', renderFilteredBooks);
+searchInput.addEventListener('input', renderFilteredBooks);
+
+// タグドロップダウンの更新
 function updateTagDropdown() {
     tagDropdown.innerHTML = `
         <option value="" disabled selected>タグを選択</option>
@@ -128,11 +152,9 @@ function saveBooks() {
     localStorage.setItem('books', JSON.stringify(books));
 }
 
-// フォームリセット
+// フォームのリセット
 function resetForm() {
     bookTitleInput.value = '';
     bookCoverInput.value = '';
     tagDropdown.value = '';
 }
-
-
