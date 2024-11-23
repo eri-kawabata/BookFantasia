@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     transition: background-color 0.5s ease, color 0.5s ease; /* 色がなめらかに変わる */
+    background-color:#7c0a02;
 }
 
 /* 共通ボタンスタイル */
@@ -120,11 +121,26 @@ body.light-mode .footer {
     background: #333333; /* 暗い背景色 */
     color: #f5d020; /* 黄色の文字 */
     transition: transform 0.3s ease-in-out, background 0.4s ease-in-out, color 0.4s ease-in-out; /* ボタンの動きをなめらかにする */
+    animation: rotateIcon 0.4s ease-in-out;
 }
 
 .theme-toggle:hover {
     transform: scale(1.2); /* ボタンを少し大きくする */
     background: #f5d020; /* 背景色を黄色にする */
+}
+
+@keyframes rotateIcon {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* ====== 検索・追加欄のスタイル ====== */
@@ -330,6 +346,31 @@ body.dark-mode .close-modal {
 body.dark-mode .close-modal:hover {
     color: rgb(255, 255, 0);
     transform: scale(1.5);/* 少し拡大 */
+}
+
+/* 感想モーダル */
+#review-modal .modal-content {
+    max-width: 700px;
+    padding: 1.5em;
+    text-align: center;
+    background: #29293d;
+    border-radius: 10px;
+    color: #f5f5f7;
+}
+
+#review-modal textarea {
+    width: 100%;
+    padding: 1em;
+    font-size: 1rem;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    resize: none;
+    margin-bottom: 1em;
+}
+
+#review-modal .btn-magic {
+    margin-top: 1em;
 }
 
 /* ====== 本棚カード（表示部分）のスタイル ====== */

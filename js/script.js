@@ -20,10 +20,15 @@ const modalDeleteBtn = document.getElementById('modal-delete-btn');
 const closeModal = document.querySelector('.close-modal');
 const statusDropdown = document.getElementById('status-dropdown');
 const sortOptions = document.getElementById('sort-options');
+const reviewModal = document.getElementById('review-modal');
+const closeReviewModal = document.querySelector('.close-review-modal');
+const reviewText = document.getElementById('review-text');
+const saveReviewBtn = document.getElementById('save-review-btn');
 
 // タグの定義
 const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
 let books = JSON.parse(localStorage.getItem('books')) || [];
+let currentBookTitle = ""; // 現在感想を書いている本のタイトル
 
 // 初期化
 document.addEventListener('DOMContentLoaded', () => {
@@ -147,6 +152,9 @@ function updateBookStatus(title, newStatus) {
 // 本を追加する際に追加日を設定
 addBookBtn.addEventListener('click', (event) => {
     event.preventDefault();
+
+    addBookBtn.disabled = true; // ボタンを一時的に無効化
+
     const title = bookTitleInput.value.trim();
     const coverFile = bookCoverInput.files[0];
     const selectedTag = tagDropdown.value;
@@ -154,6 +162,7 @@ addBookBtn.addEventListener('click', (event) => {
 
     if (!title || !coverFile || !selectedTag || !status) {
         alert('すべてのフィールドを入力してください。');
+        addBookBtn.disabled = false; // ボタンを再び有効化
         return;
     }
 
@@ -164,12 +173,13 @@ addBookBtn.addEventListener('click', (event) => {
             tags: [selectedTag],
             cover: reader.result,
             status,
-            dateAdded: new Date().toISOString() // 追加日をISOフォーマットで保存
+            dateAdded: new Date().toISOString(),
         };
         books.push(book);
         saveBooks();
         renderBooksWithAnimation(books);
         resetForm();
+        addBookBtn.disabled = false; // ボタンを再び有効化
     };
     reader.readAsDataURL(coverFile);
 });
@@ -180,58 +190,13 @@ function renderBooksWithAnimation(filteredBooks) {
     filteredBooks.forEach((book, index) => {
         const card = createBookCard(book);
         card.style.animationDelay = `${index * 0.1}s`;
-        bookCards.appendChild(card);
-    });
-}
-
-function sortBooks(sortValue) {
-    switch (sortValue) {
-        case 'title-asc':
-            books.sort((a, b) => a.title.localeCompare(b.title));
-            break;
-        case 'title-desc':
-            books.sort((a, b) => b.title.localeCompare(a.title));
-            break;
-        case 'tag-asc':
-            books.sort((a, b) => (a.tags[0] || '').localeCompare(b.tags[0] || ''));
-            break;
-        case 'tag-desc':
-            books.sort((a, b) => (b.tags[0] || '').localeCompare(a.tags[0] || ''));
-            break;
-        case 'date-asc':
-            books.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
-            break;
-        case 'date-desc':
-            books.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
-            break;
-        default:
-            break;
-    }
-
-    // 並び替え後にアニメーションを適用
-    renderBooksWithAnimation(books);
-}
-
-function renderBooksWithAnimation(filteredBooks) {
-    bookCards.innerHTML = ''; // 本棚を一度空にする
-    filteredBooks.forEach((book, index) => {
-        const card = createBookCard(book);
-
-        // アニメーションを順番に適用するために遅延を追加
-        card.style.animationDelay = `${index * 0.1}s`;
-
-        // アニメーションクラスを適用
         card.classList.add('tarot-animation');
-
-        // アニメーション終了後にクラスを削除してリセット（再適用可能にする）
         card.addEventListener('animationend', () => {
             card.classList.remove('tarot-animation');
         });
-
         bookCards.appendChild(card);
     });
 }
-
 
 // モーダルを開く
 function openModal(book) {
@@ -239,7 +204,6 @@ function openModal(book) {
     modalBookTitle.textContent = book.title;
     modalBookTags.textContent = `タグ: ${book.tags.join(', ')}`;
 
-    // 日付をフォーマットして表示
     const formattedDate = new Date(book.dateAdded).toLocaleDateString('ja-JP', {
         year: 'numeric',
         month: 'long',
@@ -247,8 +211,7 @@ function openModal(book) {
     });
     modalBookDate.textContent = `追加日: ${formattedDate}`;
 
-    // ステータス変更用のドロップダウンを作成
-    modalBookStatus.innerHTML = ''; // クリア
+    modalBookStatus.innerHTML = '';
     ['未読', '読書中', '読了'].forEach(status => {
         const option = document.createElement('option');
         option.value = status;
@@ -257,15 +220,10 @@ function openModal(book) {
         modalBookStatus.appendChild(option);
     });
 
-    modalBookStatus.addEventListener('change', () => updateBookStatus(book.title, modalBookStatus.value));
-
-    // 編集用タイトルフィールド
     modalEditTitle.value = book.title;
 
-    // 削除ボタンの設定
     modalDeleteBtn.onclick = () => deleteBook(book.title);
 
-    // 保存ボタンで編集内容を反映
     modalSaveBtn.onclick = () => {
         const newTitle = modalEditTitle.value.trim();
         if (newTitle) {
@@ -278,18 +236,32 @@ function openModal(book) {
         }
     };
 
+    modalBookCover.addEventListener('click', handleImageClick);
+
     modal.style.display = 'flex';
 }
 
-// 本を削除
-function deleteBook(title) {
-    books = books.filter(book => book.title !== title);
-    saveBooks();
-    renderBooksWithAnimation(books);
-    modal.style.display = 'none';
+function handleImageClick() {
+    currentBookTitle = modalBookTitle.textContent;
+    const book = books.find(b => b.title === currentBookTitle);
+    reviewText.value = book.review || '';
+    reviewModal.style.display = 'flex';
 }
 
-// モーダルを閉じる
+closeReviewModal.addEventListener('click', () => {
+    reviewModal.style.display = 'none';
+});
+
+saveReviewBtn.addEventListener('click', () => {
+    const book = books.find(b => b.title === currentBookTitle);
+    if (book) {
+        book.review = reviewText.value;
+        saveBooks();
+        alert('感想を保存しました！');
+        reviewModal.style.display = 'none';
+    }
+});
+
 closeModal.addEventListener('click', () => modal.style.display = 'none');
 modal.addEventListener('click', (event) => {
     if (event.target === modal) modal.style.display = 'none';
