@@ -104,6 +104,8 @@ function createBookCard(book) {
         <h3>${book.title}</h3>
         <p>タグ: ${book.tags.join(', ')}</p>
     `;
+
+// ステータス変更ドロップダウン
     const statusDropdown = document.createElement('select');
     ['未読', '読書中', '読了'].forEach(status => {
         const option = document.createElement('option');
@@ -115,11 +117,26 @@ function createBookCard(book) {
     statusDropdown.addEventListener('change', () => updateBookStatus(book.title, statusDropdown.value));
     card.appendChild(statusDropdown);
 
+// 詳細ボタン
     const detailsButton = document.createElement('button');
     detailsButton.className = 'btn-details';
     detailsButton.textContent = '詳細を見る';
     detailsButton.addEventListener('click', () => openModal(book));
-    card.appendChild(detailsButton);
+  card.appendChild(detailsButton);
+
+    // 編集ボタン
+    const editButton = document.createElement('button');
+    editButton.className = 'btn-edit';
+    editButton.textContent = '編集';
+    editButton.addEventListener('click', () => editBook(book));
+  card.appendChild(editButton);
+
+    // 削除ボタン
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'btn-delete';
+    deleteButton.textContent = '削除';
+    deleteButton.addEventListener('click', () => deleteBook(book.title));
+    card.appendChild(deleteButton);
 
     return card;
 }
@@ -132,6 +149,36 @@ function getStatusClass(status) {
         case '読了': return 'finished';
         default: return 'unread';
     }
+}
+
+// 削除機能
+function deleteBook(title) {
+    if (confirm('この本を削除しますか？')) {
+        books = books.filter(book => book.title !== title);
+        saveBooks();
+        renderBooksWithAnimation(books);
+    }
+}
+
+// 編集機能
+function editBook(book) {
+    bookTitleInput.value = book.title;
+    tagDropdown.value = book.tags[0] || '';
+    statusDropdown.value = book.status;
+    const saveButton = addBookBtn.cloneNode(true);
+    saveButton.textContent = '保存';
+    addBookBtn.replaceWith(saveButton);
+
+    saveButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        book.title = bookTitleInput.value.trim();
+        book.tags = [tagDropdown.value];
+        book.status = statusDropdown.value;
+        saveBooks();
+        renderBooksWithAnimation(books);
+        resetForm();
+        saveButton.replaceWith(addBookBtn);
+    });
 }
 
 // ステータス変更
