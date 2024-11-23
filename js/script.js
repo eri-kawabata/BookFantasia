@@ -1,3 +1,4 @@
+// DOM要素取得
 const bookCards = document.getElementById('book-cards');
 const addBookBtn = document.getElementById('add-book-btn');
 const bookTitleInput = document.getElementById('book-title');
@@ -12,6 +13,7 @@ const modalBookTitle = document.getElementById('modal-book-title');
 const modalBookTags = document.getElementById('modal-book-tags');
 const closeModal = document.querySelector('.close-modal');
 const statusDropdown = document.getElementById('status-dropdown');
+const sortOptions = document.getElementById('sort-options');
 
 // タグの定義
 const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
@@ -21,6 +23,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [];
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
     applySavedTheme();
+    loadSavedSortOption();
 });
 
 // アプリの初期化
@@ -51,6 +54,47 @@ function saveTheme(theme) {
     localStorage.setItem('theme', theme);
 }
 
+// 並び替え機能
+sortOptions.addEventListener('change', () => {
+    const sortValue = sortOptions.value;
+    localStorage.setItem('sortOption', sortValue); // 並び替えオプションを保存
+    sortBooks(sortValue);
+});
+
+function loadSavedSortOption() {
+    const savedSortOption = localStorage.getItem('sortOption');
+    if (savedSortOption) {
+        sortOptions.value = savedSortOption;
+        sortBooks(savedSortOption);
+    }
+}
+
+function sortBooks(sortValue) {
+    switch (sortValue) {
+        case 'title-asc':
+            books.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+        case 'title-desc':
+            books.sort((a, b) => b.title.localeCompare(a.title));
+            break;
+        case 'tag-asc':
+            books.sort((a, b) => (a.tags[0] || '').localeCompare(b.tags[0] || ''));
+            break;
+        case 'tag-desc':
+            books.sort((a, b) => (b.tags[0] || '').localeCompare(a.tags[0] || ''));
+            break;
+        case 'date-asc':
+            books.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+            break;
+        case 'date-desc':
+            books.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+            break;
+        default:
+            break;
+    }
+    renderBooksWithAnimation(books); // 並び替え後に再描画
+}
+
 // 本カード作成
 function createBookCard(book) {
     const card = document.createElement('div');
@@ -59,16 +103,24 @@ function createBookCard(book) {
         <img src="${book.cover}" alt="${book.title}" class="book-cover">
         <h3>${book.title}</h3>
         <p>タグ: ${book.tags.join(', ')}</p>
-        <p>
-            <select onchange="updateBookStatus('${book.title}', this.value)">
-                <option value="未読" ${book.status === '未読' ? 'selected' : ''}>未読</option>
-                <option value="読書中" ${book.status === '読書中' ? 'selected' : ''}>読書中</option>
-                <option value="読了" ${book.status === '読了' ? 'selected' : ''}>読了</option>
-            </select>
-        </p>
-        <button class="btn-details">詳細を見る</button>
     `;
-    card.querySelector('.btn-details').addEventListener('click', () => openModal(book));
+    const statusDropdown = document.createElement('select');
+    ['未読', '読書中', '読了'].forEach(status => {
+        const option = document.createElement('option');
+        option.value = status;
+        option.textContent = status;
+        if (book.status === status) option.selected = true;
+        statusDropdown.appendChild(option);
+    });
+    statusDropdown.addEventListener('change', () => updateBookStatus(book.title, statusDropdown.value));
+    card.appendChild(statusDropdown);
+
+    const detailsButton = document.createElement('button');
+    detailsButton.className = 'btn-details';
+    detailsButton.textContent = '詳細を見る';
+    detailsButton.addEventListener('click', () => openModal(book));
+    card.appendChild(detailsButton);
+
     return card;
 }
 
@@ -92,7 +144,7 @@ function updateBookStatus(title, newStatus) {
     }
 }
 
-// 本を追加
+// 本を追加する際に追加日を設定
 addBookBtn.addEventListener('click', (event) => {
     event.preventDefault();
     const title = bookTitleInput.value.trim();
@@ -107,12 +159,14 @@ addBookBtn.addEventListener('click', (event) => {
 
     const reader = new FileReader();
     reader.onload = () => {
-        books.push({
+        const book = {
             title,
             tags: [selectedTag],
-            status,
             cover: reader.result,
-        });
+            status,
+            dateAdded: new Date().toISOString() // 追加日をISOフォーマットで保存
+        };
+        books.push(book);
         saveBooks();
         renderBooksWithAnimation(books);
         resetForm();
@@ -135,8 +189,21 @@ function openModal(book) {
     modalBookCover.src = book.cover;
     modalBookTitle.textContent = book.title;
     modalBookTags.textContent = `タグ: ${book.tags.join(', ')}`;
+
+    // 日付をフォーマットして表示
+    const formattedDate = new Date(book.dateAdded).toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+    const modalBookDate = document.getElementById('modal-book-date');
+    modalBookDate.textContent = `追加日: ${formattedDate}`;
+
     modal.style.display = 'flex';
 }
+
+
+
 
 // モーダルを閉じる
 closeModal.addEventListener('click', () => modal.style.display = 'none');
@@ -186,4 +253,3 @@ function resetForm() {
     tagDropdown.value = '';
     statusDropdown.value = '';
 }
-

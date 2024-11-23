@@ -14,46 +14,67 @@
         <h1>BookFantasia</h1>
     </header>
 
+    <!-- テーマ切り替えボタン -->
     <div class="theme-toggle-container">
         <button id="theme-toggle" class="theme-toggle">🌙</button>
     </div>
 
-    <main class="container"><!-- 本を追加・検索 -->
+    <main class="container">
+        <!-- 本を追加・検索 -->
         <section class="add-and-search">
             <h2>本を追加 / 検索</h2>
-            <div class="form-group"><!-- 本を探す -->
+            <div class="form-group">
+                <label for="search-input"></label>
                 <input type="text" id="search-input" placeholder="タイトルで検索" class="input-text">
+                <label for="tag-filter"></label>
                 <select id="tag-filter" class="select-dropdown">
-                    <option value="">タグで検索</option>
+                    <option value="">すべてのタグ</option>
                 </select>
             </div>
-<form id="add-book-form">
-    <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required>
-    <select id="tag-dropdown" class="select-dropdown">
-        <option value="" disabled selected>タグを選択</option>
-        <option value="ミステリー">ミステリー</option>
-        <option value="サスペンス">サスペンス</option>
-        <option value="SF">SF</option>
-        <option value="ホラー">ホラー</option>
-        <option value="ファンタジー">ファンタジー</option>
-        <option value="エッセイ">エッセイ</option>
-        <option value="ノンフィクション">ノンフィクション</option>
-        <option value="漫画">漫画</option>
-    </select>
-    <select id="status-dropdown" class="select-dropdown">
-        <option value="" disabled selected>ステータスを選択</option>
-        <option value="未読">未読</option>
-        <option value="読書中">読書中</option>
-        <option value="読了">読了</option>
-    </select>
-    <input type="file" id="book-cover" accept="image/*" class="input-file" required>
-    <button type="submit" id="add-book-btn" class="btn-magic">本を追加</button>
-</form>
-        </section>
+
+            <!-- 本の追加フォーム -->
+            <form id="add-book-form">
+                <label for="book-title"></label>
+                <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required>
+                <label for="tag-dropdown"></label>
+                <select id="tag-dropdown" class="select-dropdown" required>
+                    <option value="" disabled selected>タグを選択</option>
+                    <option value="ミステリー">ミステリー</option>
+                    <option value="サスペンス">サスペンス</option>
+                    <option value="SF">SF</option>
+                    <option value="ホラー">ホラー</option>
+                    <option value="ファンタジー">ファンタジー</option>
+                    <option value="エッセイ">エッセイ</option>
+                    <option value="ノンフィクション">ノンフィクション</option>
+                    <option value="漫画">漫画</option>
+                </select>
+                <label for="status-dropdown"></label>
+                <select id="status-dropdown" class="select-dropdown" required>
+                    <option value="" disabled selected>ステータスを選択</option>
+                    <option value="未読">未読</option>
+                    <option value="読書中">読書中</option>
+                    <option value="読了">読了</option>
+                </select>
+                <label for="book-cover"></label>
+                <input type="file" id="book-cover" accept="image/*" class="input-file" required>
+                <button type="submit" id="add-book-btn" class="btn-magic">本を追加</button>
+                </form>
+                </section>
 
         <!-- 本棚 -->
         <section class="book-list">
             <h2>本棚</h2>
+            <div class="sort-container">
+                <label for="sort-options"></label>
+                <select id="sort-options" class="select-dropdown">
+                    <option value="title-asc">タイトル順 (昇順)</option>
+                    <option value="title-desc">タイトル順 (降順)</option>
+                    <option value="tag-asc">タグ順 (昇順)</option>
+                    <option value="tag-desc">タグ順 (降順)</option>
+                    <option value="date-asc">追加日順 (昇順)</option>
+                    <option value="date-desc">追加日順 (降順)</option>
+                </select>
+            </div>
             <div id="book-cards" class="book-cards"></div>
         </section>
 
@@ -62,11 +83,13 @@
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <img id="modal-book-cover" src="" alt="Book Cover" class="modal-book-cover">
-                <h2 id="modal-book-title"></h2>
+                <h3 id="modal-book-title"></h3>
                 <p id="modal-book-tags"></p>
+                <p id="modal-book-status"></p>
+                <p id="modal-book-date"></p> <!-- 追加日付を表示する要素 -->
             </div>
         </div>
-    </main>
+        </main>
 
     <footer class="footer">
         <p>© 2024 BookFantasia | 魔法の図書館へようこそ</p>
