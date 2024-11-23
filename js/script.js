@@ -184,6 +184,55 @@ function renderBooksWithAnimation(filteredBooks) {
     });
 }
 
+function sortBooks(sortValue) {
+    switch (sortValue) {
+        case 'title-asc':
+            books.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+        case 'title-desc':
+            books.sort((a, b) => b.title.localeCompare(a.title));
+            break;
+        case 'tag-asc':
+            books.sort((a, b) => (a.tags[0] || '').localeCompare(b.tags[0] || ''));
+            break;
+        case 'tag-desc':
+            books.sort((a, b) => (b.tags[0] || '').localeCompare(a.tags[0] || ''));
+            break;
+        case 'date-asc':
+            books.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+            break;
+        case 'date-desc':
+            books.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+            break;
+        default:
+            break;
+    }
+
+    // 並び替え後にアニメーションを適用
+    renderBooksWithAnimation(books);
+}
+
+function renderBooksWithAnimation(filteredBooks) {
+    bookCards.innerHTML = ''; // 本棚を一度空にする
+    filteredBooks.forEach((book, index) => {
+        const card = createBookCard(book);
+
+        // アニメーションを順番に適用するために遅延を追加
+        card.style.animationDelay = `${index * 0.1}s`;
+
+        // アニメーションクラスを適用
+        card.classList.add('tarot-animation');
+
+        // アニメーション終了後にクラスを削除してリセット（再適用可能にする）
+        card.addEventListener('animationend', () => {
+            card.classList.remove('tarot-animation');
+        });
+
+        bookCards.appendChild(card);
+    });
+}
+
+
 // モーダルを開く
 function openModal(book) {
     modalBookCover.src = book.cover;

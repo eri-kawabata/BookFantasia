@@ -272,8 +272,17 @@ body.light-mode .modal-content {
     text-align: center;
     color: inherit;
     margin: 0.5em 0;
-    border-bottom: 2px solid #ff6347;
     padding-bottom: 0.5em;
+}
+
+/* ダークモードでのモーダルのアクセントライン */
+body.dark-mode .modal-content h2 {
+    border-bottom: 2px solid #3a7bd5;/* 青のアクセント */
+}
+
+/* ライトモードでのモーダルのアクセントライン */
+body.light-mode .modal-content h2 {
+    border-bottom: 2px solid #ff6347;
 }
 
 /* modal-content 内の情報を横並びに */
@@ -284,13 +293,6 @@ body.light-mode .modal-content {
     margin-left: 30px;
     margin-right: 30px;
     color: white;
-}
-
-
-#modal-book-tags,
-#modal-book-date {
-    flex: 0 1 auto;
-    /* 自然なサイズでレイアウト */
 }
 
 /* モーダル内の画像 */
@@ -330,36 +332,6 @@ body.dark-mode .close-modal:hover {
     transform: scale(1.5);/* 少し拡大 */
 }
 
-
-
-
-
-/* ダークモードでのモーダルのアクセントライン */
-body.dark-mode .modal-content h2 {
-    border-bottom: 2px solid #3a7bd5;
-    /* 青のアクセント */
-}
-
-/* ステータスセクション */
-.modal-status-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-}
-
-.modal-status-section label {
-    font-size: 1rem;
-    font-weight: bold;
-    color: inherit;
-}
-
-/* ステータス表示部分 */
-.status-select {
-    margin-top: 1em;
-    font-size: 0.9rem;
-    color: #555;
-}
-
 /* ====== 本棚カード（表示部分）のスタイル ====== */
 .book-cards {
     display: grid; /* カードをグリッド形式で並べる */
@@ -379,7 +351,7 @@ body.dark-mode .modal-content h2 {
 
 .book-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
 .book-card img {
@@ -391,14 +363,15 @@ body.dark-mode .modal-content h2 {
 .book-card h3 {
     margin: 0.5em 0;
     color: white;
+    font-size: 18px;
 }
 
 .book-card p {
     color: #f5d020;
-    font-size: 0.9rem;
+    font-size: 13px;
 }
 
-/* タロットカード風アニメーション */
+/* 本が並ぶときのタロットカード風アニメーション */
 @keyframes tarotShuffle {
     0% {
         transform: rotate(0deg) translateY(0) scale(0.8);
@@ -420,15 +393,6 @@ body.dark-mode .modal-content h2 {
     animation: tarotShuffle 0.8s ease-in-out;
     animation-fill-mode: both;
     opacity: 0;
-}
-
-/* フッター */
-.footer {
-    text-align: center;
-    padding: 1em;
-    background: rgba(10, 10, 20, 0.9);
-    color: #f5d020;
-    font-size: 0.9rem;
 }
 
 /* ====== レスポンシブ対応 ====== */
