@@ -6,11 +6,17 @@ const bookCoverInput = document.getElementById('book-cover');
 const tagDropdown = document.getElementById('tag-dropdown');
 const searchInput = document.getElementById('search-input');
 const tagFilter = document.getElementById('tag-filter');
+const header = document.querySelector('.header'); // ヘッダーを取得
 const themeToggle = document.getElementById('theme-toggle');
 const modal = document.getElementById('modal');
 const modalBookCover = document.getElementById('modal-book-cover');
 const modalBookTitle = document.getElementById('modal-book-title');
 const modalBookTags = document.getElementById('modal-book-tags');
+const modalBookDate = document.getElementById('modal-book-date');
+const modalBookStatus = document.getElementById('modal-book-status');
+const modalEditTitle = document.getElementById('modal-edit-title');
+const modalSaveBtn = document.getElementById('modal-save-btn');
+const modalDeleteBtn = document.getElementById('modal-delete-btn');
 const closeModal = document.querySelector('.close-modal');
 const statusDropdown = document.getElementById('status-dropdown');
 const sortOptions = document.getElementById('sort-options');
@@ -40,14 +46,21 @@ themeToggle.addEventListener('click', () => {
 });
 
 function setTheme(theme) {
-    document.body.className = theme; // 直接クラスを設定
-    themeToggle.textContent = theme === 'dark-mode' ? '☀️' : '🌙';
-    saveTheme(theme);
+    document.body.className = theme; // bodyにテーマを設定
+    themeToggle.textContent = theme === 'dark-mode' ? '🌙' : '☀';
+
+    // ヘッダーにテーマクラスを設定
+    if (header) {
+        header.className = `header ${theme}`;
+    }
+
+    saveTheme(theme); // 選択したテーマを保存
 }
 
+// 保存されたテーマを適用する関数
 function applySavedTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
-    setTheme(savedTheme);
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode'; // デフォルトはダークモード
+    setTheme(savedTheme); // 保存されたテーマを適用
 }
 
 function saveTheme(theme) {
@@ -105,38 +118,8 @@ function createBookCard(book) {
         <p>タグ: ${book.tags.join(', ')}</p>
     `;
 
-// ステータス変更ドロップダウン
-    const statusDropdown = document.createElement('select');
-    ['未読', '読書中', '読了'].forEach(status => {
-        const option = document.createElement('option');
-        option.value = status;
-        option.textContent = status;
-        if (book.status === status) option.selected = true;
-        statusDropdown.appendChild(option);
-    });
-    statusDropdown.addEventListener('change', () => updateBookStatus(book.title, statusDropdown.value));
-    card.appendChild(statusDropdown);
-
-// 詳細ボタン
-    const detailsButton = document.createElement('button');
-    detailsButton.className = 'btn-details';
-    detailsButton.textContent = '詳細を見る';
-    detailsButton.addEventListener('click', () => openModal(book));
-  card.appendChild(detailsButton);
-
-    // 編集ボタン
-    const editButton = document.createElement('button');
-    editButton.className = 'btn-edit';
-    editButton.textContent = '編集';
-    editButton.addEventListener('click', () => editBook(book));
-  card.appendChild(editButton);
-
-    // 削除ボタン
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'btn-delete';
-    deleteButton.textContent = '削除';
-    deleteButton.addEventListener('click', () => deleteBook(book.title));
-    card.appendChild(deleteButton);
+    // 本カード全体をクリックでモーダルを開く
+    card.addEventListener('click', () => openModal(book));
 
     return card;
 }
@@ -149,36 +132,6 @@ function getStatusClass(status) {
         case '読了': return 'finished';
         default: return 'unread';
     }
-}
-
-// 削除機能
-function deleteBook(title) {
-    if (confirm('この本を削除しますか？')) {
-        books = books.filter(book => book.title !== title);
-        saveBooks();
-        renderBooksWithAnimation(books);
-    }
-}
-
-// 編集機能
-function editBook(book) {
-    bookTitleInput.value = book.title;
-    tagDropdown.value = book.tags[0] || '';
-    statusDropdown.value = book.status;
-    const saveButton = addBookBtn.cloneNode(true);
-    saveButton.textContent = '保存';
-    addBookBtn.replaceWith(saveButton);
-
-    saveButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        book.title = bookTitleInput.value.trim();
-        book.tags = [tagDropdown.value];
-        book.status = statusDropdown.value;
-        saveBooks();
-        renderBooksWithAnimation(books);
-        resetForm();
-        saveButton.replaceWith(addBookBtn);
-    });
 }
 
 // ステータス変更
@@ -243,14 +196,49 @@ function openModal(book) {
         month: 'long',
         day: 'numeric',
     });
-    const modalBookDate = document.getElementById('modal-book-date');
     modalBookDate.textContent = `追加日: ${formattedDate}`;
+
+    // ステータス変更用のドロップダウンを作成
+    modalBookStatus.innerHTML = ''; // クリア
+    ['未読', '読書中', '読了'].forEach(status => {
+        const option = document.createElement('option');
+        option.value = status;
+        option.textContent = status;
+        if (book.status === status) option.selected = true;
+        modalBookStatus.appendChild(option);
+    });
+
+    modalBookStatus.addEventListener('change', () => updateBookStatus(book.title, modalBookStatus.value));
+
+    // 編集用タイトルフィールド
+    modalEditTitle.value = book.title;
+
+    // 削除ボタンの設定
+    modalDeleteBtn.onclick = () => deleteBook(book.title);
+
+    // 保存ボタンで編集内容を反映
+    modalSaveBtn.onclick = () => {
+        const newTitle = modalEditTitle.value.trim();
+        if (newTitle) {
+            book.title = newTitle;
+            saveBooks();
+            renderBooksWithAnimation(books);
+            modal.style.display = 'none';
+        } else {
+            alert('タイトルを入力してください。');
+        }
+    };
 
     modal.style.display = 'flex';
 }
 
-
-
+// 本を削除
+function deleteBook(title) {
+    books = books.filter(book => book.title !== title);
+    saveBooks();
+    renderBooksWithAnimation(books);
+    modal.style.display = 'none';
+}
 
 // モーダルを閉じる
 closeModal.addEventListener('click', () => modal.style.display = 'none');
