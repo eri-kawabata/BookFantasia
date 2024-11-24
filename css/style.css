@@ -394,7 +394,6 @@ body.light-mode #review-modal .modal-content {
 /* ヘッダー */
 #review-modal h2 {
     font-size: 25px;
-    margin-bottom: 8px;
     color: #cdae03;/* ゴールド系 */
 }
 
@@ -458,7 +457,7 @@ body.light-mode #review-modal textarea {
 
 /* 保存ボタン */
 #review-modal .btn-save {
-    background: #4c91af;
+    background: #64bee4;
     color: white;
     border: none;
     border-radius: 10px;
@@ -476,7 +475,7 @@ body.light-mode #review-modal textarea {
 
 /* 閉じるボタン */
 #review-modal .btn-close {
-    background: #e74c3c;/* 赤色 */
+    background: #e85747;/* 赤色 */
     color: white;
     border: none;
     border-radius: 10px;
