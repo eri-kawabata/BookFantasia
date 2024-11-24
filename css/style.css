@@ -377,7 +377,7 @@ body.dark-mode .close-modal:hover {
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
     text-align: center;
-    color: #f5f5f7;/* 白文字 */
+    color: #ffffff;/* 白文字 */
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -394,7 +394,7 @@ body.light-mode #review-modal .modal-content {
 /* ヘッダー */
 #review-modal h2 {
     font-size: 25px;
-    margin-bottom: 1em;
+    margin-bottom: 8px;
     color: #cdae03;/* ゴールド系 */
 }
 
@@ -403,11 +403,11 @@ body.light-mode #review-modal .modal-content {
     width: 88%;/* 横幅を広く */
     height: 300px;/* 高さを大きめに */
     padding: 1em;
-    font-size: 1.1rem;
+    font-size: 15px;
     border: 1px solid rgba(200, 200, 200, 0.6);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.1);/* 半透明の背景 */
-    color: #f5f5f7;
+    color: #ffffff;
     resize: none;/* サイズ変更禁止 */
     transition: border-color 0.3s ease, background 0.3s ease;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
