@@ -77,7 +77,7 @@ border-top: 2px solid #d4af37;/* ゴールドの境界線 */
 /* ボディ（ライトモード用） */
 body.light-mode {
     background: linear-gradient(135deg, #7c0a02, #a10c01, #7c0a02);/* グラデーションの背景色 */
-    color: #ffffff;  /* ダークブラウン */
+    color: #ffffff;
 }
 
 /* ヘッダー（ライトモード用） */
@@ -417,6 +417,29 @@ body.light-mode #review-modal textarea {
     border-color: #ffd700;/* フォーカス時の色 */
     background: rgba(255, 255, 255, 0.2);/* 背景を微調整 */
     outline: none;
+}
+
+.star-rating {
+    display: flex;/* フレックスボックスで配置 */
+    justify-content: center;/* 水平方向の中央揃え */
+    align-items: center;/* 垂直方向の中央揃え */
+    margin-top: 10px;/* 上下に適度な余白を設定 */
+}
+
+.star {
+    font-size: 20px;
+    color: lightgray;
+    cursor: pointer;
+    transition: none;  /* なめらかな色の変化を無効にする */
+}
+
+.star.selected {
+    color: gold;
+}
+
+.star:hover {
+    color: inherit;
+    /* ホバーしても色を変更しない */
 }
 
 /* ボタンエリア */
