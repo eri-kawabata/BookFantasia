@@ -24,6 +24,9 @@ const reviewModal = document.getElementById('review-modal');
 const closeReviewModal = document.querySelector('.close-review-modal');
 const reviewText = document.getElementById('review-text');
 const saveReviewBtn = document.getElementById('save-review-btn');
+const menuToggle = document.querySelector('.circle-menu');
+const menuItems = document.querySelectorAll('.menu-item');
+
 
 // タグの定義
 const tags = ['ミステリー', 'サスペンス', 'SF', 'ホラー', 'ファンタジー', 'エッセイ', 'ノンフィクション', '漫画'];
@@ -44,11 +47,26 @@ function initializeApp() {
     updateTagFilter();
 }
 
+// 星評価HTML生成（共通化）
+function createStarRatingHTML(rating = 0) {
+    return Array.from({ length: 5 }).map((_, i) =>
+        `<span data-rating="${i + 1}" class="star ${i < rating ? 'selected' : ''}">★</span>`
+    ).join('');
+}
+
 // テーマ設定
 themeToggle.addEventListener('click', () => {
     const isDarkMode = document.body.classList.contains('dark-mode');
     setTheme(isDarkMode ? 'light-mode' : 'dark-mode');
 });
+
+function applyTheme(theme) {
+    document.body.className = theme;
+    const menu = document.querySelector('.circle-menu');
+    menu.style.background = theme === 'dark-mode'
+        ? 'linear-gradient(45deg, #3a1469, #1a237e)'
+        : 'linear-gradient(45deg, #ff9800, #ff5722)';
+}
 
 function setTheme(theme) {
     document.body.className = theme;
@@ -82,14 +100,15 @@ function loadSavedSortOption() {
 }
 
 function sortBooks(sortValue) {
-    switch (sortValue) {
-        case 'title-asc': books.sort((a, b) => a.title.localeCompare(b.title)); break;
-        case 'title-desc': books.sort((a, b) => b.title.localeCompare(a.title)); break;
-        case 'tag-asc': books.sort((a, b) => (a.tags[0] || '').localeCompare(b.tags[0] || '')); break;
-        case 'tag-desc': books.sort((a, b) => (b.tags[0] || '').localeCompare(a.tags[0] || '')); break;
-        case 'date-asc': books.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded)); break;
-        case 'date-desc': books.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)); break;
-    }
+    const sortFunctions = {
+        'title-asc': (a, b) => a.title.localeCompare(b.title),
+        'title-desc': (a, b) => b.title.localeCompare(a.title),
+        'tag-asc': (a, b) => (a.tags[0] || '').localeCompare(b.tags[0] || ''),
+        'tag-desc': (a, b) => (b.tags[0] || '').localeCompare(a.tags[0] || ''),
+        'date-asc': (a, b) => new Date(a.dateAdded) - new Date(b.dateAdded),
+        'date-desc': (a, b) => new Date(b.dateAdded) - new Date(a.dateAdded),
+    };
+    books.sort(sortFunctions[sortValue]);
     renderBooksWithAnimation(books);
 }
 
@@ -154,7 +173,7 @@ function renderBooksWithAnimation(filteredBooks) {
     });
 }
 
-// モーダルを開く
+// モーダルの開閉
 function openModal(book) {
     modalBookCover.src = book.cover;
     modalBookTitle.textContent = book.title;
@@ -167,9 +186,7 @@ function openModal(book) {
     const starContainer = document.getElementById('modal-star-rating') || document.createElement('div');
     starContainer.id = 'modal-star-rating';
     starContainer.className = 'star-rating';
-    starContainer.innerHTML = Array.from({ length: 5 }).map((_, i) => `
-        <span data-rating="${i + 1}" class="star ${i < book.rating ? 'selected' : ''}">★</span>
-    `).join('');
+    starContainer.innerHTML = createStarRatingHTML(book.rating);
     starContainer.querySelectorAll('.star').forEach(star =>
         star.addEventListener('click', (e) => {
             book.rating = parseInt(e.target.dataset.rating, 10);
@@ -194,14 +211,27 @@ function openModal(book) {
 closeModal.addEventListener('click', () => modal.style.display = 'none');
 modal.addEventListener('click', (event) => { if (event.target === modal) modal.style.display = 'none'; });
 
-closeReviewModal.addEventListener('click', () => reviewModal.style.display = 'none');
+// 本の画像クリックで感想モーダルを開く
+modalBookCover.addEventListener('click', () => {
+    currentBookTitle = modalBookTitle.textContent; // 本のタイトルを取得
+    const book = books.find(b => b.title === currentBookTitle);
+    reviewText.value = book?.review || ""; // 保存済み感想を表示
+    reviewModal.style.display = 'flex'; // モーダルを表示
+});
+
+// 感想モーダルを閉じる
+closeReviewModal.addEventListener('click', () => {
+    reviewModal.style.display = 'none';
+});
+
+// 感想を保存
 saveReviewBtn.addEventListener('click', () => {
     const book = books.find(b => b.title === currentBookTitle);
     if (book) {
-        book.review = reviewText.value;
+        book.review = reviewText.value; // 感想を保存
         saveBooks();
         alert('感想を保存しました！');
-        reviewModal.style.display = 'none';
+        toggleModal(reviewModal, false);
     }
 });
 
@@ -239,8 +269,33 @@ function updateTagFilter() {
 }
 
 function deleteBook(title) {
-    books = books.filter(b => b.title !== title);
-    saveBooks();
-    renderBooksWithAnimation(books);
-    modal.style.display = 'none';
+    if (confirm(`"${title}" を削除してもよろしいですか？`)) {
+        books = books.filter(b => b.title !== title);
+        saveBooks();
+        renderBooksWithAnimation(books);
+        toggleModal(modal, false);
+    }
 }
+
+menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('open');
+
+    if (menuToggle.classList.contains('open')) {
+        const startAngle = Math.PI; // 左方向の180度
+        const endAngle = Math.PI * 1.5; // 上方向の270度
+        const angleStep = (endAngle - startAngle) / (menuItems.length - 1);
+        const radius = 120; // 半径（px）
+
+        menuItems.forEach((item, index) => {
+            const angle = startAngle + index * angleStep;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            item.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    } else {
+        menuItems.forEach((item) => {
+            item.style.transform = 'translate(0, 0)';
+        });
+    }
+});

@@ -19,6 +19,13 @@ body {
     transition: transform 0.5s ease, background 0.5s ease, color 0.5s ease;
 }
 
+/* ホバー時の魔法感を追加 */
+.btn-magic:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #ffd9009c, #8b0000);
+    box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.7);
+}
+
 /* ヘッダー共用スタイル */
 .header {
     text-align: center;
@@ -485,23 +492,124 @@ body.light-mode #review-modal textarea {
     transform: scale(1.05);
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-    #review-modal .modal-content {
-        max-width: 90%;
-        /* 横幅を狭く */
-    }
+/* ==== フローティングメニューボタンのスタイル ==== */
+/* メニューボタン本体 */
+.circle-menu {
+    position: fixed;/* 画面上の固定位置に配置 */
+    bottom: 80px;/* 画面下から80pxの位置に配置 */
+    right: 60px;/* 画面右から60pxの位置に配置 */
+    width: 70px;/* ボタンの横幅を70pxに設定 */
+    height: 70px;/* ボタンの高さを70pxに設定 */
+    background: linear-gradient(45deg, #6a1b9a, #1e88e5);/* ボタンの背景色をグラデーションに設定 */
+    border-radius: 50%;/* ボタンを丸くする */
+    display: flex;/* 内側の要素を中央揃えにするためにフレックスボックスを使用 */
+    justify-content: center;/* 横方向に中央揃え */
+    align-items: center;/* 縦方向に中央揃え */
+    cursor: pointer;/* マウスを重ねるとクリック可能に見せる */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);/* ボタンに影をつけて立体的に見せる */
+    z-index: 1000;/* 他の要素より前面に表示する */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;/* なめらかに拡大や影の変化をするよう設定 */
+}
 
-    #review-modal textarea {
-        width: 95%;
-        /* テキストエリアの幅を狭く */
-    }
+/* ボタンにマウスを重ねたときのスタイル */
+.circle-menu:hover {
+    transform: scale(1.1);/* ボタンを少し大きくする */
+    box-shadow: 0 10px 20px rgba(255, 255, 100, 0.5);/* ボタンの影を強調する */
+}
 
-    #review-modal .modal-actions {
-        flex-direction: column;
-        /* ボタンを縦並びに */
-        gap: 1em;
-    }
+/* ボタン内のアイコン */
+.circle-menu i {
+    font-size: 2rem;/* アイコンのサイズを大きく設定 */
+    color: white;/* アイコンの色を白に設定 */
+    transition: transform 0.3s ease;/* アイコンの動きをなめらかに */
+}
+
+/* メニューボタンが開いているときのアイコンの変化 */
+.circle-menu.open i {
+    transform: rotate(45deg);/* アイコンを45度回転させる */
+}
+
+/* ==== メニューアイテムのスタイル（扇形配置対応） ==== */
+/* メニューアイテム全体 */
+.menu-items {
+    list-style: none;/* リストのデフォルトの点や番号を非表示にする */
+    position: relative;/* メニューボタンを基準に配置 */
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;/* 初期状態では透明 */
+    pointer-events: none;/* 初期状態ではクリック操作を無効にする */
+    transition: opacity 0.5s ease;/* なめらかに表示/非表示を切り替え */
+}
+
+/* メニューボタンが開かれたときのスタイル */
+.circle-menu.open .menu-items {
+    opacity: 1; /* アイテムを表示 */
+    pointer-events: auto;/* クリック操作を有効にする */
+}
+
+/* 個別メニューアイテム */
+.menu-item {
+    width: 50px;/* アイテムの横幅 */
+    height: 50px;/* アイテムの高さ */
+    background: linear-gradient(145deg, #4a148c, #6a1b9a);/* 背景色をグラデーションに */
+    border-radius: 50%;/* アイテムを丸く */
+    display: flex;/* アイコンを中央揃えに */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;/* マウスを重ねるとクリック可能に */
+    position: absolute;/* ボタンを基準に絶対配置 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);/* アイテムに影をつける */
+    color: white;/* アイコンの色を白 */
+    font-size: 1.5rem;/* アイコンのサイズ */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;/* なめらかなアニメーション */
+}
+
+/* アイテムにマウスを重ねたときのスタイル */
+.menu-item:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.5);
+}
+
+/* ==== ラベル（メニューアイテムの説明） ==== */
+.menu-item::after {
+    content: attr(data-label);/* アイテムの説明を表示 */
+    position: absolute;/* アイコンを基準に配置 */
+    top: 105%;/* アイコンの下にラベルを表示 */
+    left: 50%;/* 水平方向に中央揃え */
+    transform: translateX(-50%);/* 中央揃えを調整 */
+    font-size: 0.8rem;/* ラベルの文字サイズ */
+    color: #ddd;/* ラベルの色 */
+    opacity: 0;/* 初期状態では透明 */
+    transition: opacity 0.3s ease;/* なめらかに表示/非表示を切り替え */
+    white-space: nowrap;/* ラベルが折り返されないように */
+}
+
+/* ラベルをマウスホバー時に表示 */
+.menu-item:hover::after {
+    opacity: 1;/* ラベルを表示 */
+}
+
+/* ダークモード対応 */
+body.dark-mode .circle-menu {
+    background: linear-gradient(45deg, #3a1469, #1a237e);
+    color: #fff;
+}
+
+body.dark-mode .menu-item {
+    background: linear-gradient(145deg, #2e1534, #4e2a66);
+    color: #fff;
+}
+
+body.light-mode .circle-menu {
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+    color: #333;
+}
+
+body.light-mode .menu-item {
+    background: linear-gradient(145deg, #ffcc80, #ffa726);
+    color: #333;
 }
 
 /* ====== 本棚カード（表示部分）のスタイル ====== */
@@ -567,26 +675,31 @@ body.light-mode #review-modal textarea {
     opacity: 0;
 }
 
-/* ====== レスポンシブ対応 ====== */
-@media (max-width: 600px) {
-    .modal-content {
-        width: 90%; /* 幅を画面の90%にする */
-    }
+/* ====== 全体のレスポンシブ対応 ====== */
 
-    .book-cards {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));/* カードを小さく並べる */
-    }
-
-        .modal-info {
-            flex-wrap: wrap;
-        }
-}
-
-/* レスポンシブ対応 */
+/* 最小幅480pxのスマートフォン向け対応 */
 @media (max-width: 480px) {
+    body {
+        font-size: 0.9rem;
+        /* 全体のフォントサイズを小さく */
+    }
+
+    .circle-menu {
+        bottom: 10px;
+        right: 10px;
+        width: 55px;
+        height: 55px;
+    }
+
+    .menu-item {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
     .modal-content {
-        padding: 15px;
-        width: 95%;
+        padding: 10px;
+        max-width: 90%;
     }
 
     .modal-content h2 {
@@ -594,11 +707,72 @@ body.light-mode #review-modal textarea {
     }
 
     .modal-content .btn {
-        width: 100%;/* ボタンをフル幅 */
-        margin-bottom: 0.5em;
+        width: 100%;
+        /* ボタンをフル幅 */
+        font-size: 0.9rem;
     }
 
-        .modal-info {
-            flex-wrap: wrap;
-        }
+    .book-cards {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        /* カードを小さく並べる */
+    }
+
+    .book-card {
+        padding: 0.5em;
+    }
+}
+
+/* タブレットサイズ (最大幅768px) */
+@media (max-width: 768px) {
+    .circle-menu {
+        bottom: 15px;
+        right: 15px;
+        width: 60px;
+        height: 60px;
+    }
+
+    .menu-item {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+
+    .modal-content {
+        padding: 15px;
+        max-width: 80%;
+    }
+
+    .book-cards {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        /* カードの幅を調整 */
+    }
+}
+
+/* 中型ディスプレイ向け (最大幅1024px) */
+@media (max-width: 1024px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .circle-menu {
+        bottom: 20px;
+        right: 20px;
+        width: 65px;
+        height: 65px;
+    }
+
+    .menu-item {
+        width: 50px;
+        height: 50px;
+    }
+
+    .modal-content {
+        padding: 20px;
+        max-width: 70%;
+    }
+
+    .book-cards {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        /* 幅に合わせて調整 */
+    }
 }
