@@ -1,3 +1,8 @@
+// dotenv を使って環境変数を読み込む
+if (typeof process !== "undefined") {
+    require('dotenv').config(); // .env ファイルを読み込む
+}
+
 var config = {
   apiKey: "AIzaSyBI_EseIy_MW_oIlT7w5nV9RZBYxPdHkss",
   authDomain: "bookfantasia-9c1a0.firebaseapp.com",
