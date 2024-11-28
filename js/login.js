@@ -1,18 +1,6 @@
-// dotenv を使って環境変数を読み込む
-if (typeof process !== "undefined") {
-    require('dotenv').config(); // .env ファイルを読み込む
-}
+// Firebaseの設定を初期化
+firebase.initializeApp(window.ENV);
 
-var config = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID,
-};
-firebase.initializeApp(config);
 
 // DOM取得
 var inputarea = document.getElementById('input-area');
@@ -26,7 +14,7 @@ newuser.addEventListener('click', function () {
   var email = document.getElementById('email').value;
   var password = document.getElementById('password').value;
 
-  // メールアドレスからユーザーネームを生成
+    // メールアドレスからユーザーネームを生成
     var username = email.split('@')[0];
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -103,6 +91,7 @@ function loginDisplay(username) {
     }, 100);
 }
 
+
 // ログアウト時のUI更新
 function logoutDisplay() {
     logout.classList.add('hide');
@@ -114,6 +103,6 @@ function logoutDisplay() {
 
 // メッセージ表示の共通関数
 function showMessage(message, color) {
-  info.textContent = message;
-  info.style.color = color;
+    info.textContent = message;
+    info.style.color = color;
 }

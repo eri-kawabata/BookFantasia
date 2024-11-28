@@ -23,12 +23,22 @@
     </div>
 
     <!-- テキスト表示用 -->
-    <p id="info"></p>
-        <script>
-            function goHome() {
-                window.location.href = './index.html'; // ホームページにリダイレクト
-            }
-        </script>
+    <script>
+        function goHome() {
+            window.location.href = './index.html'; // ホームページにリダイレクト
+        }
+
+        // Firebase設定をHTMLに埋め込む
+        window.ENV = {
+            apiKey: "AIzaSyBI_EseIy_MW_oIlT7w5nV9RZBYxPdHkss",
+            authDomain: "bookfantasia-9c1a0.firebaseapp.com",
+            databaseURL: "https://bookfantasia-9c1a0-default-rtdb.firebaseio.com",
+            projectId: "bookfantasia-9c1a0",
+            storageBucket: "bookfantasia-9c1a0.firebasestorage.app",
+            messagingSenderId: "737526103482",
+            appId: "1:737526103482:web:6d16d28e4525e30bbf3183"
+        };
+    </script>
 
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
     <script src="./js/login.js"></script>
