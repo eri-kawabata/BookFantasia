@@ -499,7 +499,7 @@ body.light-mode #review-modal textarea {
     right: 60px;/* 画面右から60pxの位置に配置 */
     width: 70px;/* ボタンの横幅を70pxに設定 */
     height: 70px;/* ボタンの高さを70pxに設定 */
-    background: linear-gradient(45deg, #6a1b9a, #1e88e5);/* ボタンの背景色をグラデーションに設定 */
+    background: linear-gradient(45deg, #00ffff, #1e88e5);/* ボタンの背景色をグラデーションに設定 */
     border-radius: 50%;/* ボタンを丸くする */
     display: flex;/* 内側の要素を中央揃えにするためにフレックスボックスを使用 */
     justify-content: center;/* 横方向に中央揃え */
@@ -552,7 +552,7 @@ body.light-mode #review-modal textarea {
 .menu-item {
     width: 50px;/* アイテムの横幅 */
     height: 50px;/* アイテムの高さ */
-    background: linear-gradient(145deg, #4a148c, #6a1b9a);/* 背景色をグラデーションに */
+    background: linear-gradient(145deg, #008cff, #6a1b9a);/* 背景色をグラデーションに */
     border-radius: 50%;/* アイテムを丸く */
     display: flex;/* アイコンを中央揃えに */
     justify-content: center;
@@ -592,12 +592,12 @@ body.light-mode #review-modal textarea {
 
 /* ダークモード対応 */
 body.dark-mode .circle-menu {
-    background: linear-gradient(45deg, #3a1469, #1a237e);
+    background: linear-gradient(45deg, #00ffff,#1e88e5);
     color: #fff;
 }
 
 body.dark-mode .menu-item {
-    background: linear-gradient(145deg, #2e1534, #4e2a66);
+    background: linear-gradient(145deg, #6c91ff, #4e2a66);
     color: #fff;
 }
 
