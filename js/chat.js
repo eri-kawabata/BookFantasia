@@ -1,22 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-// Firebase 初期化
-const firebaseConfig = {
-    apiKey: "AIzaSyApe3uZ0XSxtX45ZBxtRaPH4PnFmc-vRl8",
-    authDomain: "bookfantasia-chat.firebaseapp.com",
-    databaseURL: "https://bookfantasia-chat-default-rtdb.firebaseio.com",
-    projectId: "bookfantasia-chat",
-    storageBucket: "bookfantasia-chat.firebasestorage.app",
-    messagingSenderId: "315091292226",
-    appId: "1:315091292226:web:6280a716d34703ab629ddb"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// OpenAI API キー
-const OPENAI_API_KEY = env.get('API_KEY');
+// Firebase データベース初期化
+const db = getDatabase();
 
 // DOM 要素取得
 const messageForm = document.getElementById('message-form');
@@ -39,7 +24,7 @@ messageForm.addEventListener('submit', async (e) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${OPENAI_API_KEY}`
+                    "Authorization": `Bearer ${window.OPENAI_API_KEY}`
                 },
                 body: JSON.stringify({
                     model: "gpt-3.5-turbo",
@@ -72,7 +57,6 @@ onChildAdded(messagesRef, (snapshot) => {
     const data = snapshot.val();
     displayMessage(data.text, data.sender);
 });
-
 
 // メッセージを画面に表示
 function displayMessage(message, sender) {

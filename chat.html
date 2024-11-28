@@ -24,6 +24,19 @@
         function goHome() {
             window.location.href = './index.html'; // ホームページにリダイレクト
         }
+        // Firebase設定をHTMLに埋め込む
+        const firebaseConfig = {
+            apiKey: "AIzaSyApe3uZ0XSxtX45ZBxtRaPH4PnFmc-vRl8",
+            authDomain: "bookfantasia-chat.firebaseapp.com",
+            databaseURL: "https://bookfantasia-chat-default-rtdb.firebaseio.com",
+            projectId: "bookfantasia-chat",
+            storageBucket: "bookfantasia-chat.firebasestorage.app",
+            messagingSenderId: "315091292226",
+            appId: "1:315091292226:web:6280a716d34703ab629ddb"
+        };
+
+        // Firebase初期化
+        firebase.initializeApp(firebaseConfig);
     </script>
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
     <script src="./js/chat.js"></script>
