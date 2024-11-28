@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     transition: background-color 0.5s ease, color 0.5s ease; /* 色がなめらかに変わる */
-    background-color:#7c0a02;
+background: linear-gradient(135deg, #1c1c2b, #2d3545, #29293d);/* グラデーションの背景色 */
 }
 
 /* 共通ボタンスタイル */
