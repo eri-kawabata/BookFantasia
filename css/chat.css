@@ -11,7 +11,7 @@ button {
 }
 
 body {
-    background: linear-gradient(135deg, #1c1c2b,#2d3545,#29293d);
+    background: linear-gradient(135deg, #1c1c2b, #29293d);
     color: #333;
     font-size: 16px;
     display: flex;
@@ -22,31 +22,47 @@ body {
     overflow: hidden;
 }
 
+.header-title {
+    font-size: 32px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+    text-align: center;
+}
+
 .container {
     background: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    padding: 20px;
     width: 100%;
     max-width: 400px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-}
-
-#input-area {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
 }
 
-input {
+.chat-window {
     width: 100%;
-    padding: 12px 15px;
+    height: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f4f4f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-form {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+#message-input {
+    flex: 1;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
@@ -55,7 +71,7 @@ input {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-input:focus {
+#message-input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
@@ -63,7 +79,7 @@ input:focus {
 }
 
 button {
-    padding: 12px 20px;
+    padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     color: #fff;
@@ -80,51 +96,36 @@ button:hover {
     transform: translateY(-2px);
 }
 
-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
+.message {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: #f1f1f1;
 }
 
-#logout {
-    margin-top: 15px;
+.message.you {
+    background: #007bff;
+    color: white;
+    text-align: right;
 }
 
-.hide {
-    display: none;
-}
-
-#info {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-    background: linear-gradient(135deg, #6dffe4, #acb6e5);
-    padding: 15px 20px;
-    border-radius: 50px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: transform 0.5s ease, opacity 0.5s ease;
+.message.ai {
+    background: #ffc107;
+    color: #333;
+    text-align: left;
 }
 
 .home-button {
     background: linear-gradient(135deg, #007bff, #0056b3);
     color: #fff;
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 10px 20px;
+    font-size: 14px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    /* ボタン間の余白 */
+    margin-top: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: background 0.3s ease, transform 0.2s ease;
-    align-self: center;
-    /* ボタンを中央に配置 */
 }
 
 .home-button:hover {
