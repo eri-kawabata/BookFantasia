@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI博士 - チャット</title>
+    <link rel="stylesheet" href="./css/chat.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header-title">AI博士</h1>
+        </header>
+        <main id="chat-window" class="chat-window"></main>
+        <form id="message-form" class="message-form">
+            <input id="message-input" type="text" placeholder="聞きたいことを入力..." required>
+            <button type="submit" aria-label="送信">送信</button>
+        </form>
+        <button id="home-button" class="home-button" onclick="goHome()">ホームに戻る</button>
+    </div>
+    <script>
+        function goHome() {
+            window.location.href = './index.html'; // ホームページにリダイレクト
+        }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+    <script src="./js/chat.js"></script>
+</body>
+
+</html>
