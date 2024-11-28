@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // OpenAI API キー
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = env.get('API_KEY');
 
 // DOM 要素取得
 const messageForm = document.getElementById('message-form');
