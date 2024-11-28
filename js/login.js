@@ -1,50 +1,49 @@
 // Firebaseの設定を初期化
 firebase.initializeApp(window.ENV);
 
-
 // DOM取得
-var inputarea = document.getElementById('input-area');
-var newuser = document.getElementById('newuser');
-var login = document.getElementById('login');
-var logout = document.getElementById('logout');
-var info = document.getElementById('info');
+const inputarea = document.getElementById('input-area');
+const newuser = document.getElementById('newuser');
+const login = document.getElementById('login');
+const logout = document.getElementById('logout');
+const info = document.getElementById('info');
 
 // 新規登録処理
 newuser.addEventListener('click', function () {
-  var email = document.getElementById('email').value;
-  var password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-    // メールアドレスからユーザーネームを生成
-    var username = email.split('@')[0];
+    const username = email.split('@')[0];
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            var user = userCredential.user;
-
-            // プロフィールに displayName を設定
+            const user = userCredential.user;
             return user.updateProfile({
-                displayName: username
-            }).then(() => user.reload()); // 再読み込みして最新データを反映
+                displayName: username,
+            }).then(() => user.reload());
         })
         .then(() => {
-            showMessage("登録に成功しました！", "white");
+            console.log("登録成功");
+            showMessage("登録に成功しました！", "success");
         })
         .catch((error) => {
-            showMessage(`登録できません: ${error.message}`, "white");
+            console.error("登録エラー:", error);
+            showMessage(`登録できません: ${error.message}`, "error");
         });
 });
 
 // ログイン処理
 login.addEventListener('click', function () {
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
-            info.textContent = ""; // UIリセット
+            console.log("ログイン成功");
         })
         .catch((error) => {
-            showMessage(`ログインできません: ${error.message}`, "white");
+            console.error("ログインエラー:", error);
+            showMessage(`ログインできません: ${error.message}`, "error");
         });
 });
 
@@ -52,15 +51,18 @@ login.addEventListener('click', function () {
 logout.addEventListener('click', function () {
     firebase.auth().signOut()
         .then(() => {
-            showMessage("ログアウトしました。", "white");
+            console.log("ログアウト完了");
+            showMessage("ログアウトしました。", "success");
             logoutDisplay();
         });
 });
 
 // 認証状態の確認
 firebase.auth().onAuthStateChanged(function (user) {
+    console.log("認証状態の変更:", user);
     if (user) {
-        loginDisplay(user.displayName);
+        const username = user.displayName || user.email.split('@')[0] || "ゲスト";
+        loginDisplay(username);
     } else {
         logoutDisplay();
     }
@@ -71,26 +73,14 @@ function loginDisplay(username) {
     logout.classList.remove('hide');
     inputarea.classList.add('hide');
 
-    // displayName が null の場合メールアドレスの一部を使用
     if (!username || username === "null") {
-        var user = firebase.auth().currentUser;
-        if (user && user.email) {
-            username = user.email.split('@')[0]; // メールアドレスの@の前を取得
-        } else {
-            username = "ゲスト"; // 万が一何も取得できない場合のデフォルト
-        }
+        const user = firebase.auth().currentUser;
+        username = user?.displayName || user?.email?.split('@')[0] || "ゲスト";
     }
 
-    showMessage(`ようこそ、${username} さん！`, "white");
-
-    info.style.opacity = "0";
-    info.style.transform = "translateX(-50%) scale(0.5)";
-    setTimeout(() => {
-        info.style.opacity = "1";
-        info.style.transform = "translateX(-50%) scale(1)";
-    }, 100);
+    console.log("ログイン時のユーザー名:", username);
+    showMessage(`ようこそ、${username} さん！`, "success");
 }
-
 
 // ログアウト時のUI更新
 function logoutDisplay() {
@@ -101,8 +91,23 @@ function logoutDisplay() {
     info.style.transform = "translateX(-50%) scale(0.5)";
 }
 
-// メッセージ表示の共通関数
-function showMessage(message, color) {
+function showMessage(message, type) {
     info.textContent = message;
-    info.style.color = color;
+
+    // メッセージタイプに応じたスタイル設定
+    if (type === "success") {
+        info.style.color = "white";
+        info.style.backgroundColor = "green";
+    } else if (type === "error") {
+        info.style.color = "white";
+        info.style.backgroundColor = "red";
+    } else {
+        info.style.color = "black";
+        info.style.backgroundColor = "lightgrey";
+    }
+
+    // 常に表示し続けるのでタイマーは削除
+    info.style.opacity = "1";
+    info.style.transform = "translateX(-50%) scale(1)";
 }
+
