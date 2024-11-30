@@ -4,12 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>ユーザー認証</title>
+    <title>ログイン</title>
     <link rel="stylesheet" href="./css/login.css" />
 </head>
 
 <body>
+
+    <!-- 全体を囲むコンテナ -->
     <div class="container">
+        <!-- 入力エリア -->
         <div id="input-area">
             <input id="email" type="email" placeholder="メールアドレスを入力" required />
             <input id="password" type="password" placeholder="パスワードを入力" required />
@@ -22,10 +25,15 @@
 
     </div>
 
-    <!-- テキスト表示用 -->
+    <!-- ユーザーへのメッセージや通知を表示するための要素、一応 -->
     <p id="info"></p>
 
+    <!-- スクリプト: ホームに戻る機能 -->
     <script>
+        /**
+             * ホーム画面へ移動する関数
+             * onclickイベントで呼び出され、ユーザーをindex.htmlにリダイレクト
+             */
         function goHome() {
             window.location.href = './index.html'; // ホームページにリダイレクト
         }
@@ -42,6 +50,7 @@
         };
     </script>
 
+    <!-- Firebaseライブラリの読み込み -->
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
     <script src="./js/login.js"></script>
 </body>

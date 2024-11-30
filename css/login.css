@@ -6,10 +6,11 @@ input,
 button {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box;/* パディングやボーダーを含めてサイズを計算 */
     font-family: 'Roboto', sans-serif;
 }
 
+/* 背景と全体レイアウト */
 body {
     background: linear-gradient(135deg, #1c1c2b,#2d3545,#29293d);
     color: #333;
@@ -19,11 +20,12 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    overflow: hidden;
+    overflow: hidden;/* スクロールを防ぐ */
 }
 
+/* 全体を囲むコンテナ */
 .container {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.9);/* 半透明の白背景 */
     border-radius: 12px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     padding: 30px;
@@ -33,17 +35,20 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* ホバー時のコンテナの動き */
 .container:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 
+/* 入力エリアのデザイン */
 #input-area {
-    display: flex;
-    flex-direction: column;
+    display: flex;/* フレックスボックスで縦に並べる */
+    flex-direction: column;/* 縦方向に並べる */
     gap: 20px;
 }
 
+/* 入力フィールドの基本デザイン */
 input {
     width: 100%;
     padding: 12px 15px;
@@ -55,6 +60,7 @@ input {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 入力フィールドがフォーカスされたときのデザイン */
 input:focus {
     outline: none;
     border-color: #007bff;
@@ -62,6 +68,7 @@ input:focus {
     background: #fff;
 }
 
+/* ボタンの基本デザイン */
 button {
     padding: 12px 20px;
     font-size: 16px;
@@ -75,25 +82,30 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* ボタンがホバーされたときのデザイン */
 button:hover {
     background: linear-gradient(135deg, #0056b3, #003d7e);
     transform: translateY(-2px);
 }
 
+/* 無効なボタンのデザイン */
 button:disabled {
     background: #ccc;
     cursor: not-allowed;
     box-shadow: none;
 }
 
+/* ログアウトボタンの余白調整 */
 #logout {
     margin-top: 15px;
 }
 
+/* 隠された要素 */
 .hide {
-    display: none;
+    display: none;/* 要素を非表示にする */
 }
 
+/* 情報表示エリアのデザイン */
 #info {
     position: absolute;
     bottom: 20px;
@@ -111,6 +123,7 @@ button:disabled {
     transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
+/* ホームボタンのデザイン */
 .home-button {
     background: linear-gradient(135deg, #007bff, #0056b3);
     color: #fff;
@@ -127,6 +140,7 @@ button:disabled {
     /* ボタンを中央に配置 */
 }
 
+/* ホームボタンがホバーされたときのデザイン */
 .home-button:hover {
     background: linear-gradient(135deg, #0056b3, #003d7e);
     transform: translateY(-2px);

@@ -2,22 +2,31 @@
 <html lang="ja">
 
 <head>
+    <!-- ページの基本情報 -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI博士 - チャット</title>
+    <title>AI博士</title>
     <link rel="stylesheet" href="./css/chat.css">
 </head>
 
 <body>
+    <!-- ページ全体を囲むコンテナ -->
     <div class="container">
+        <!-- ヘッダーセクション -->
         <header class="header">
-            <h1 class="header-title">AI博士</h1>
+            <h1 class="header-title">AI博士</h1><!-- ページタイトル -->
         </header>
-        <main id="chat-window" class="chat-window"></main>
+
+        <!-- チャットウィンドウ -->
+        <main id="chat-window" class="chat-window"></main><!-- チャットメッセージが表示されるエリア -->
+        <!-- メッセージ送信フォーム -->
         <form id="message-form" class="message-form">
-            <input id="message-input" type="text" placeholder="聞きたいことを入力..." required>
+            <!-- 入力フィールド -->
+            <input id="message-input" type="text" placeholder="聞きたいことを入力してね..." required>
+            <!-- 送信ボタン -->
             <button type="submit" aria-label="送信">送信</button>
         </form>
+        <!-- ホームに戻るボタン -->
         <button id="home-button" class="home-button" onclick="goHome()">ホームに戻る</button>
     </div>
     <script>
@@ -38,6 +47,7 @@
         // Firebase初期化
         firebase.initializeApp(firebaseConfig);
     </script>
+    <!-- Firebaseライブラリの読み込み -->
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
     <script src="./js/chat.js"></script>
 </body>

@@ -6,30 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookFantasia</title>
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Almendra&display=swap" rel="stylesheet">
-    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
+    <!-- ページのヘッダー -->
     <header class="header">
-        <h1>BookFantasia</h1>
+        <h1>BookFantasia</h1><!-- サイトのタイトル -->
     </header>
-
+    <!-- テーマ切り替え用のボタン -->
     <div class="theme-toggle-container">
         <button id="theme-toggle" class="theme-toggle">🌙</button>
     </div>
 
+    <!-- メインコンテンツ -->
     <main class="container">
         <!-- 本を追加・検索 -->
-        <section class="add-and-search">
-            <div class="form-group">
-                <input type="text" id="search-input" placeholder="タイトルで検索" class="input-text">
-                <select id="tag-filter" class="select-dropdown">
+        <section class="add-and-search"><
+            <div class="form-group"><!-- 検索フォーム -->
+                <input type="text" id="search-input" placeholder="タイトルで検索" class="input-text"><!-- タイトルで検索 -->
+                <select id="tag-filter" class="select-dropdown"><!-- タグで検索 -->
                     <option value="">タグで検索</option>
                 </select>
             </div>
+
+            <!-- 本の追加フォーム -->
             <form id="add-book-form">
-                <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required>
+                <input type="text" id="book-title" placeholder="本のタイトルを入力" class="input-text" required><!-- 本のタイトル -->
+                <!-- タグ選択 -->
                 <select id="tag-dropdown" class="select-dropdown">
                     <option value="" disabled selected>タグを選択</option>
                     <option value="ミステリー">ミステリー</option>
@@ -41,13 +45,17 @@
                     <option value="ノンフィクション">ノンフィクション</option>
                     <option value="漫画">漫画</option>
                 </select>
+
+                <!-- ステータス選択 -->
                 <select id="status-dropdown" class="select-dropdown">
                     <option value="" disabled selected>ステータスを選択</option>
                     <option value="未読">未読</option>
                     <option value="読書中">読書中</option>
                     <option value="読了">読了</option>
                 </select>
+                <!-- 本のカバー画像 -->
                 <input type="file" id="book-cover" accept="image/*" class="input-file" required>
+                <!-- 本を追加するボタン -->
                 <button type="submit" id="add-book-btn" class="btn-magic">本を追加</button>
             </form>
         </section>
@@ -55,6 +63,7 @@
         <!-- 本棚 -->
         <section class="book-list">
             <h2>本棚</h2>
+            <!-- 並び替えオプション -->
             <select id="sort-options" class="select-dropdown">
                 <option value="title-asc">タイトル順 (昇順)</option>
                 <option value="title-desc">タイトル順 (降順)</option>
@@ -63,24 +72,30 @@
                 <option value="date-asc">追加日順 (昇順)</option>
                 <option value="date-desc">追加日順 (降順)</option>
             </select>
+            <!-- 本カードを表示するエリア -->
             <div id="book-cards" class="book-cards"></div>
         </section>
 
         <!-- モーダルウィンドウ -->
         <div id="modal" class="modal">
             <div class="modal-content">
+                <!-- モーダルを閉じるボタン -->
                 <span class="close-modal">&times;</span>
+                <!-- 本の詳細情報 -->
                 <img id="modal-book-cover" src="" alt="Book Cover" class="modal-book-cover">
                 <h2 id="modal-book-title"></h2>
                 <div class="modal-info">
                 <p id="modal-book-tags"></p>
                 <p id="modal-book-date"></p>
                 </div>
+
+                <!-- 編集用のセクション -->
                 <select id="modal-book-status" class="select-dropdown"></select>
                 <input type="text" id="modal-edit-title" class="input-text">
                 <button id="modal-save-btn" class="btn">保　　存</button>
                 <button id="modal-delete-btn" class="btn-danger">本を削除</button>
             </div>
+
             <!-- 感想用モーダル -->
             <div id="review-modal" class="modal">
                 <div class="modal-content">
@@ -95,12 +110,14 @@
         </div>
     </main>
 
-
+<!-- サークルメニュー -->
 <div class="circle-menu">
     <i class="fas fa-plus"></i>
     <ul class="menu-items">
-        <li class="menu-item" data-label="フレンド">👥</li>
-        <li class="menu-item" data-label="AIチャット">
+        <li class="menu-item" data-label="フレンドチャット">
+            <a href="friend_chat.html" style="text-decoration: none; color: inherit;">👥</a>
+        </li>
+        <li class="menu-item" data-label="AI博士">
             <a href="chat.html" style="text-decoration: none; color: inherit;">📄</a>
         </li>
         <li class="menu-item" data-label="ログイン">
@@ -109,6 +126,7 @@
     </ul>
 </div>
 
+<!-- ページのフッター -->
     <footer class="footer">
         <p>© 2024 BookFantasia | 魔法の図書館へようこそ</p>
     </footer>
